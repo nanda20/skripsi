@@ -4,7 +4,7 @@
 			<h3>Pelanggan</h3>
 		</div>
 
-		<div class="title_right">
+		<!-- <div class="title_right">
 			<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Search for...">
@@ -15,7 +15,7 @@
       <br>
       <br>
   </div>
-</div>
+</div> -->
 </div>
 
 <div class="clearfix"></div>
@@ -43,12 +43,13 @@
 				echo "<table id='datatable-responsive' class='table table-striped table-bordered dt-responsive table-hover'>
 				<thead>
 				<tr>
-					<td>NO.</td>
-					<td>Id Pelanggan</td>
+					<td>No.</td>
+					<td>Nomer Meter</td>
+					<td>Nama</td>
 					<td>Alamat</td>
 					<td>Nomor Tiang</td>
 					<td>Lat</td>
-					<td>Long</td>
+					<td>Lon</td>
 					<td>Kode Baca</td>
 					<td>Proses</td>
 				</tr>
@@ -59,6 +60,7 @@
 					echo"<tr>
 					<td>".$i."</td>
 					<td>".$row->id_pel."</td>
+					<td>".$row->nama."</td>
 					<td>".$row->alamat."</td>
 					<td>".$row->no_tiang."</td>
 					<td>".$row->lat."</td>
@@ -79,4 +81,3 @@
 </div>
 </div>
 </div>
-
