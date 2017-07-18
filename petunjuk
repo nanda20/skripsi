@@ -1,0 +1,18 @@
+query cek_lapangan :
+	SELECT * FROM pemesanan WHERE no_lapangan=1 AND tgl_pesan='2016-06-20' AND status!='Sudah Bayar' AND 12 BETWEEN jam_pesan AND jam_pesan+durasi
+
+query tampil pemesanan :
+	CREATE VIEW data_pemesanan AS
+	SELECT p.nama, p.no_telp, pem.no_lapangan, pem.tgl_pesan, pem.jam_pesan, pem.durasi, pem.dp,
+	(IF(pem.jam_pesan<12, lh.harga_pagi, IF((pem.jam_pesan>=12 AND pem.jam_pesan<18), lh.harga_siang, lh.harga_malam))) AS harga_perjam,
+	(IF(pem.jam_pesan<12, lh.harga_pagi, IF((pem.jam_pesan>=12 AND pem.jam_pesan<18), lh.harga_siang, lh.harga_malam)) * pem.durasi) AS total_bayar,
+    (IF(pem.jam_pesan<12, lh.harga_pagi, IF((pem.jam_pesan>=12 AND pem.jam_pesan<18), lh.harga_siang, lh.harga_malam)) * pem.durasi - pem.dp) AS sisa_bayar,
+    pem.status
+	FROM pemesanan AS pem
+	JOIN lapangan_harga AS lh ON pem.no_lapangan = lh.no_lapangan
+	JOIN pemesan AS p ON pem.id_pemesan = p.id_pemesan
+
+- Awal buka jam 8.
+- Tutup jam 12
+- Jika melebihi jam 12, maka tidak bisa pesan
+- Harga : ikut awal jam pesan(pagi/siang/malam) * kali durasi
