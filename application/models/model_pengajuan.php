@@ -51,7 +51,7 @@ class Model_pengajuan extends CI_Model{
     }
 
     public function simpan_pengajuan($data){
-  		$this->db->query("insert into pengajuan (id_pel, alamat, no_tiang, lat, long, kode_baca) values ('$data[id_pel]', '$data[alamat]', $data[no_tiang]', '$data[lat]', '$data[long]', '$data[kode_baca]')");
+  		$this->db->query("insert into pengajuan (id, id_pel, nama, alamat, desa, kecamatan, keterangan) values ('$data[id]','$data[id_pel]', '$data[nama]', '$data[alamat]', $data[desa]', '$data[kecamatan]', '$data[keterangan]')");
 
   			// values ('".$data["id_pegawai"]."','".$data["nama"]."', '".$data["alamat"]."', '".$data["no_telp"]."', '".$data["jenis_karyawan"]."', '".$data["email"]."', '".$data["password"]."', '".$data["jenis_kelamin"]."', '".$data["tanggal_lahir"]"','".$data["status"]"';
   	}
