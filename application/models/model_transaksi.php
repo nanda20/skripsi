@@ -59,13 +59,16 @@ JOIN pelanggan AS pel ON t.id_pel = pel.id_pel");
     return $pemakaian;
   }
 
+  // public function pemakaian_kwh($id, $stand_lalu, $stand_kini){
+  //   $this->db->query("select SUM(pemakaian) AS saving_pemakaian from transaksi group by month(now)");
+
   public function pelanggan(){
     $pelanggan = $this->db->get('pelanggan');
     $hasil_pelanggan = $pelanggan->result();
     return $hasil_pelanggan;
   }
 
-  
+
 
   // public function update($id, $data){
 		// 	// $kode_pegawai=$this->input->post('id_pegawai');
