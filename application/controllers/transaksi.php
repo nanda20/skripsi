@@ -74,9 +74,13 @@ public function insert(){
     public function index()
   	{
   		$rr["datanya"]=$this->Model_transaksi->all_transaksi();
+      $a =$this->Model_transaksi->sumPemakaian()->result();
+      $rr['totalPemakaian']= $a[0]->total;
+   
   			// $this->load->view("pelanggan_baru",$qq);
 
   			 // load view
+
   		$data['title'] = 'Transaksi - PLN';
   		$data['header'] = '';
   		$data['content'] = $this->load->view('lihat_transaksi', $rr, true, array('error' => ' '));
@@ -86,7 +90,7 @@ public function insert(){
   		$this->load->view('template/content');
   		$this->load->view('template/footer');
 
-      $config['base_url'] = 'http://localhost:8081/manajemen_pelanggan/transaksi/index';
+      $config['base_url'] = 'http://localhost:8080/manajemen_pelanggan/transaksi/index';
       $config['total_rows'] = 200;
       $config['per_page'] = 20;
 

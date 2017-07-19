@@ -11,6 +11,13 @@ JOIN pelanggan AS pel ON t.id_pel = pel.id_pel");
     // return $aa;
   }
 
+  public function sumPemakaian(){
+    //return sum pemakaian bulan ini
+    
+  return $this->db->query("SELECT SUM(pemakaian) as total from transaksi where MONTH(tgl)=MONTH(NOW())");
+    // return $row;
+  }
+
   public function all_transaksi(){
     $tgl = date("Y-m");
     $this->db->like('tgl',$tgl,'right');

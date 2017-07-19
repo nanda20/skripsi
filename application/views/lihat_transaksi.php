@@ -1,7 +1,10 @@
+
 <div class="">
 	<div class="page-title">
 		<div class="title_left">
-			<h3>Transaksi</h3>
+			<h3>Transaksi</h3> 
+			<h5>Total Pemakaikan Bulan Ini <?php echo $totalPemakaian ;?></h5>
+
 		</div>
 
 		<div class="title_right">
