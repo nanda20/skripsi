@@ -1,11 +1,20 @@
 
         <form action="<?= base_url('pelanggan/update/') ?>" method="post" id="form-pegawai" data-parsley-validate class="form-horizontal form-label-left">
             <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Id Pelanggan <span class="required">*</span>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nomer Meter <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <?php #echo form_input('id_pelanggan'); ?>
                     <input type="text" name="id_pel" id="id_pel" value="<?php echo $pelanggan[0]->id_pel ?>" required="required" class="form-control col-md-7 col-xs-12">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <?php #echo form_input('id_pelanggan'); ?>
+                    <input type="text" name="nama" value="<?php echo $pelanggan[0]->nama ?>" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
             </div>
 
@@ -37,7 +46,7 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Long <span class="required">*</span>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Lon <span class="required">*</span>
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <?php #echo form_input('password',$pegawai[0]->password); ?>

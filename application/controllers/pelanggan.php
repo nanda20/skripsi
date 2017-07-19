@@ -68,6 +68,7 @@ class Pelanggan extends CI_Controller {
 	public function simpan_pelanggan()
 	{
 			$dt["id_pel"]=$this->input->post("id_pel");
+			$dt["nama"]=$this->input->post(" nama");
 			$dt["alamat"]=$this->input->post("alamat");
 			$dt["no_tiang"]=$this->input->post("no_tiang");
 			$dt["lat"]=$this->input->post("lat");
