@@ -76,7 +76,7 @@ public function insert(){
   		$rr["datanya"]=$this->Model_transaksi->all_transaksi();
       $a =$this->Model_transaksi->sumPemakaian()->result();
       $rr['totalPemakaian']= $a[0]->total;
-   
+
   			// $this->load->view("pelanggan_baru",$qq);
 
   			 // load view
@@ -90,7 +90,7 @@ public function insert(){
   		$this->load->view('template/content');
   		$this->load->view('template/footer');
 
-      $config['base_url'] = 'http://localhost:8080/manajemen_pelanggan/transaksi/index';
+      $config['base_url'] = 'base_url()';
       $config['total_rows'] = 200;
       $config['per_page'] = 20;
 

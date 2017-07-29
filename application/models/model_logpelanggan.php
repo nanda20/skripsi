@@ -1,23 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Model_pelanggan extends CI_Model{
+class Model_logpelanggan extends CI_Model{
 
   public function all_pelanggan(){
 
-    $rr =$this->db->query("select * from pelanggan");
+    $rr=$this->db->query("select * from log_pelanggan");
     return $rr;
   }
 
-  public function all_kodebaca(){
-    $rr = $this->db->query("SELECT pel.id_pel, pel.nama, pel.alamat, pel.no_tiang, pel.lat, pel.long, kb.kode_baca FROM pelanggan AS pel
-    JOIN kode_baca AS kb ON pel.kode_baca = kb.kode_baca");
-    return $rr;
-}
-
-  public function hapus($id_pel){
-    $this->db->query("delete from pelanggan where id_pel='".$id_pel."'");
-  }
+  // public function hapus($id_pel){
+  //   $this->db->query("delete from pelanggan where id_pel='".$id_pel."'");
+  // }
 
   public function getById($Id){
     return $this->db->query("select * from pelanggan where id_pel='$Id'");
@@ -39,24 +33,19 @@ class Model_pelanggan extends CI_Model{
     return $cek;
   }
 
-  public function insert_log($data){
-    $this->db->insert('log_pelanggan', $data);
-  }
-
-
-  public function update($id){
-			$id_pel=$this->input->post('id_pel');
-			$nama=$this->input->post('nama');
-			$alamat=$this->input->post('alamat');
-			$no_tiang=$this->input->post('no_tiang');
-			$lat=$this->input->post('lat');
-			$long=$this->input->post('long');
-			$kode_baca=$this->input->post('kode_baca');
-			// $cek=$this->db->query("update pelanggan set nama='$nama', alamat='$alamat', no_tiang='$no_tiang', lat='$lat', long='$long', kode_baca='$kode_baca' where id_pel='$id_pel'");
-      $this->db->where('id_pel', $id_pel);
-      $this->db->update('pelanggan', array('id_pel'=>$id_pel, 'nama'=>$nama, 'alamat'=>$alamat, 'no_tiang'=>$no_tiang, 'lat'=>$lat, 'long'=>$long, 'kode_baca'=>$kode_baca));
-      // return $cek;
-    }
+  // public function update($id){
+	// 		$id_pel=$this->input->post('id_pel');
+	// 		$nama=$this->input->post('nama');
+	// 		$alamat=$this->input->post('alamat');
+	// 		$no_tiang=$this->input->post('no_tiang');
+	// 		$lat=$this->input->post('lat');
+	// 		$long=$this->input->post('long');
+	// 		$kode_baca=$this->input->post('kode_baca');
+	// 		// $cek=$this->db->query("update pelanggan set nama='$nama', alamat='$alamat', no_tiang='$no_tiang', lat='$lat', long='$long', kode_baca='$kode_baca' where id_pel='$id_pel'");
+  //     $this->db->where('id_pel', $id_pel);
+  //     $this->db->update('pelanggan', array('id_pel'=>$id_pel, 'nama'=>$nama, 'alamat'=>$alamat, 'no_tiang'=>$no_tiang, 'lat'=>$lat, 'long'=>$long, 'kode_baca'=>$kode_baca));
+  //     // return $cek;
+  //   }
 
     public function simpan_pelanggan($data){
   		$this->db->query("insert into pelanggan (id_pel, nama, alamat, no_tiang, lat, long, kode_baca) values ('$data[id_pel]', '$data[nama]', '$data[alamat]', $data[no_tiang]', '$data[lat]', '$data[long]', '$data[kode_baca]')");

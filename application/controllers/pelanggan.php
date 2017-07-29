@@ -9,7 +9,7 @@ class Pelanggan extends CI_Controller {
 
 			$this->load->database();
 			$this->load->helper(array("url","form" ));
-			$this->load->model("model_pelanggan");
+			$this->load->model(array("model_pelanggan", "model_logpelanggan", "model_kodebaca"));
 	}
 	 function tambahdata(){
 		// load view
@@ -25,7 +25,8 @@ class Pelanggan extends CI_Controller {
     }
     public function insert(){
     	$data = $this->input->post();
-
+// echo "<pre>";
+// print_r($data);
         $this->model_pelanggan->insert($data);
         redirect('pelanggan/index');
     }
@@ -48,16 +49,38 @@ class Pelanggan extends CI_Controller {
 	}
 	public function hapus()
 	{
+		$data=$this->model_pelanggan->getById($this->uri->segment(3))->result();
+
+		foreach ($data as $d) {
+				$pelanggan["id_pel"] = $d->id_pel;
+				$pelanggan["nama"] = $d->nama;
+				$pelanggan["alamat"] = $d->alamat;
+				$pelanggan["no_tiang"] = $d->no_tiang;
+				$pelanggan["lat"] = $d->lat;
+				$pelanggan["long"] = $d->long;
+				$pelanggan["kode_baca"] = $d->kode_baca;
+		}
+
+		// echo "<pre>";
+		// print_r($pelanggan);
+
+		$this->model_pelanggan->insert_log($pelanggan);
+
 			$this->model_pelanggan->hapus($this->uri->segment(3));
 			redirect("pelanggan/index","refresh");
+
+			// $data = $this->input->post();
+			//
+      //   $this->model_pelanggan->hapus($data);
+      //   redirect('pelanggan/index');
 	}
 	public function isi_pelanggan()
 	{
-			$this->load->view("isi_pelanggan");
+		$dt["kode_baca"]=$this->model_pelanggan->all_kodebaca();
 			 // load view
 		$data['title'] = 'Pelanggan - PLN';
 		$data['header'] = '';
-		$data['content'] = $this->load->view('isi_pelanggan', $rr, true);
+		$data['content'] = $this->load->view('isi_pelanggan', $dt, true);
 		$data['script'] = '';
 		$this->load->view('template/header', $data);
 		$this->load->view('template/left');

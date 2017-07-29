@@ -33,10 +33,24 @@
             </ul>
           </li>
 
+          <li><a><i class="fa fa-keyboard-o"></i> Kode Baca <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="<?= base_url('kode_baca/index') ?>">Lihat Data</a></li>
+              <li><a href="<?= base_url('kode_baca/tambahdata') ?>">Tambah Data</a></li>
+            </ul>
+          </li>
+
           <li><a><i class="fa fa-user-plus"></i> Pelanggan <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="<?= base_url('pelanggan/index') ?>">Lihat Data</a></li>
               <li><a href="<?= base_url('pelanggan/tambahdata') ?>">Tambah Data</a></li>
+            </ul>
+          </li>
+
+          <li><a><i class="fa fa-history"></i> Record Pelanggan <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="<?= base_url('logpelanggan/index') ?>">Lihat Data</a></li>
+
             </ul>
           </li>
 
