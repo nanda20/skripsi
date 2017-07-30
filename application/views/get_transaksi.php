@@ -8,18 +8,20 @@
 	}
 	$transakasi = $this->db->get('transaksi');
 	$hasil_transaksi = $transakasi->result();
-	$no = 1;
-	foreach($hasil_transaksi as $daftar){
+
+$i=1;
+foreach ($hasil_transaksi as $daftar) {
+	echo"<tr>
+	<td>".$i."</td>
+	<td>".$daftar->id."</td>
+	<td>".$daftar->id_pel."</td>
+	<td>".$daftar->tgl."</td>
+	<td>".$daftar->stand_lalu."</td>
+	<td>".$daftar->stand_kini."</td>
+	<td>".$daftar->pemakaian."</td>
+	<td> <img style='height:100px;width:auto;' src=".base_url().'upload/'.$daftar->foto." /></td>
+	<td>".$daftar->keterangan."</td>
+	</tr>";
+	$i++;
+}
 ?>
-<tr>
-				<td><?php echo $no ?></td>
-				<td><?php echo$daftar->id?></td>
-				<td><?php echo$daftar->id_pel?></td>
-				<td><?php echo$daftar->tgl?></td>
-				<td><?php echo$daftar->stand_lalu?></td>
-				<td><?php echo$daftar->stand_kini?></td>
-				<td><?php echo$daftar->pemakaian?></td>
-				<td><?php echo$daftar->foto?></td>
-				<td><?php echo$daftar->keterangan ?></td>
-			</tr>
-<?php $no++; } ?>
