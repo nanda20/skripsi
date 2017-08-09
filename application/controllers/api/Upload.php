@@ -20,6 +20,7 @@ class Upload extends REST_Controller {
 		if(move_uploaded_file($_FILES['file']['tmp_name'], $file_path)) {
 
                 $data = array(
+                	'id1'           => $this->post('id1'),
                     'id_pel'        => $this->post('id_pel'),
                     'kelainan'      => $this->post('kelainan'),
                     'stand_kini'    => $this->post('stand'),
@@ -32,18 +33,13 @@ class Upload extends REST_Controller {
 				// // echo $insert;
 				// // print_r($insert);
 
-		        // if ($insert) {
-		        // 	$this->response(array('status' => 'Success', 502));
-		        //     // $this->response($data, 200);
-		        // } else {
-		        //     $this->response(array('status' => 'id_barang sudah ada', 502));
-		        // }
-
-
-		   $result = array(
-		    	"success" => "File successfully uploaded");
-		} else{
-		    $result = array("success" => "error uploading file");
+		        if ($insert) {
+		        	$result = array( "status" => "success");
+		        	// $this->response(array('status' => 'Success', 502));
+		            // $this->response($data, 200);
+		        } else {
+		            $result = array( "status" => "error");
+		        }
 		}
 		echo json_encode($result, JSON_PRETTY_PRINT);
 

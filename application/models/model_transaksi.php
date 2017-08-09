@@ -88,6 +88,7 @@ JOIN pelanggan AS pel ON t.id_pel = pel.id_pel");
 
   $value=array(
     'id'=>null,
+    'id1'=>$data['id1'],
     'id_pel'=>$data['id_pel'],
     'tgl'=>date("Y-m-d"),
     'stand_lalu'=>$stand_lalu,
@@ -97,7 +98,9 @@ JOIN pelanggan AS pel ON t.id_pel = pel.id_pel");
     'keterangan'=>$data['kelainan']
 
     );
+   $this->db->query("UPDATE pelanggan set status='selesai' where id=".$data['id1']."");
    return  $this->db->insert('transaksi', $value);
+
    // $sql_insert_transaksi= $this->db->query("INSERT INTO transaksi VALUES(NULL,".$data['id_pel'].",".$dateNow.",$stand_lalu,".$data['stand_kini'].",".$pemakaian.",'".$data['foto']."','".$data['kelainan']."')");
 
 

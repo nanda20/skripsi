@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Model_pelanggan extends CI_Model{
 
   public function all_pelanggan(){
-
+  
     $rr =$this->db->query("select * from pelanggan");
     return $rr;
   }
@@ -63,4 +63,14 @@ class Model_pelanggan extends CI_Model{
 
   			// values ('".$data["id_pegawai"]."','".$data["nama"]."', '".$data["alamat"]."', '".$data["no_telp"]."', '".$data["jenis_karyawan"]."', '".$data["email"]."', '".$data["password"]."', '".$data["jenis_kelamin"]."', '".$data["tanggal_lahir"]"','".$data["status"]"';
   	}
+
+
+    //---------------------QUERY FOR API---------------------------------
+
+    public function api_pelanggan(){
+  
+    $rr =$this->db->query("select * from pelanggan where tanggal_baca=DATE(NOW())");
+    return $rr;
+  }
+
 }
