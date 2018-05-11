@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
   <div class="left_col scroll-view">
     <div class="navbar nav_title" style="border: 0;">
-      <a href="index" class="site_title"><i class="fa fa-desktop"></i> <span>Div. Trans Energi</span></a>
+      <a href="index" class="site_title"><i class="fa fa-desktop"></i> <span>Sentimen</span></a>
     </div>
 
     <div class="clearfix"></div>
@@ -26,24 +26,34 @@
         <h3>General</h3>
         <ul class="nav side-menu">
           <li><a href="<?= base_url('beranda')?>"><i class="fa fa-home"></i> Home</a></li>
-          <li><a><i class="fa fa-edit"></i> User Login <span class="fa fa-chevron-down"></span></a>
+
+        <li><a href="<?= base_url('onlinecrawling/tambahdatacrawling') ?>"> <i class="fa fa-home"></i> Online Crawling</a>
+        </li>
+        
+          <li><a><i class="fa fa-edit"></i> Data Training <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="<?= base_url('login_user/index') ?>">Lihat Data</a></li>
-              <li><a href="<?= base_url('login_user/tambahdata') ?>">Tambah Data</a></li>
+              <li><a href="<?= base_url('datatraining/viewtraining') ?>">Data Training</a></li>
+              </li>
+              <li><a href="<?= base_url('datatraining/viewstemming') ?>">Data Stemming</a></li>
+              </li>
+              <li><a href="<?= base_url('datatraining/viewdatafeature') ?>">Data Features</a></li>
+              <li><a href="<?= base_url('') ?>">Data Corpus</a></li>
+              <li><a href="<?= base_url('datalearing/tambahdataexcel') ?>">Tambah Data excel</a></li>
             </ul>
           </li>
 
-          <li><a><i class="fa fa-keyboard-o"></i> Kode Baca <span class="fa fa-chevron-down"></span></a>
+          <li><a><i class="fa fa-edit"></i> Chi Square <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="<?= base_url('kode_baca/index') ?>">Lihat Data</a></li>
-              <li><a href="<?= base_url('kode_baca/tambahdata') ?>">Tambah Data</a></li>
+              <li><a href="<?= base_url('chisquare/viewcorpus') ?>">Lihat Data</a></li>
+              <li><a href="<?= base_url('chisquare/processchisquare') ?>">Hitung Chi Square</a></li>
             </ul>
           </li>
-
-          <li><a><i class="fa fa-user-plus"></i> Pelanggan <span class="fa fa-chevron-down"></span></a>
+          <li><a><i class="fa fa-user-plus"></i> Naive Bayes <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="<?= base_url('pelanggan/index') ?>">Lihat Data</a></li>
+              <li><a href="<?= base_url('naivebayes/index') ?>">Lihat Data</a></li>
               <li><a href="<?= base_url('pelanggan/tambahdata') ?>">Tambah Data</a></li>
+               <li><a href="<?= base_url('pelanggan/grafik') ?>">Grafik Pelanggan</a></li>
+               <li><a href="<?= base_url('pelanggan/pilih_pelanggan') ?>">Pilih Pelanggan Hari Ini</a></li>
             </ul>
           </li>
 

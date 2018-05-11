@@ -33,7 +33,8 @@
 
     <!-- Custom Theme Style -->
     <link href="<?= base_url() ?>assets/gentelella/build/css/custom.min.css" rel="stylesheet">
-
+    
+    
     <?= $header ?>
 
     <!-- Base URL javascript -->

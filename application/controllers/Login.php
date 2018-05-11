@@ -9,17 +9,17 @@ class Login extends CI_Controller{
 		parent::__construct();
 		//Codeigniter : Write Less Do More
 
-		$this->load->model('Mdl_login', 'login');
+		// $this->load->model('Mdl_login', 'login');
 
 	}
 
 	function index(){
-		if ( $this->session->username != '' ) { // cek apakah sudah login? jika sudah, redirect ke halaman login
-			redirect('login/berhasil');
-		}
-		else{	// jika belum, maka ke form login
-			$this->load->view('login_view');
-		}
+		// if ( $this->session->username != '' ) { // cek apakah sudah login? jika sudah, redirect ke halaman login
+		// 	redirect('login/berhasil');
+		// }
+		// else{	// jika belum, maka ke form login
+		// 	$this->load->view('login_view');
+		// }
 	}
 
 
