@@ -1,41 +1,20 @@
 
 
-        <form action="<?= base_url('login_user/insert/') ?>" method="post" id="form-login" data-parsley-validate class="form-horizontal form-label-left">
+        <form action="<?= base_url('datatraining/processexcel/') ?>" method="post" id="form-login" data-parsley-validate class="form-horizontal form-label-left" enctype="multipart/form-data">
            
 
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Username <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <?php #echo form_input('alamat'); ?>
-                    <input type="text" name="username" required="required" class="form-control col-md-7 col-xs-12">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Password <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <?php #echo form_input('no_telp'); ?>
-                    <input type="text" name="password" required="required" class="form-control col-md-7 col-xs-12">
-                </div>
-            </div>
-
         <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama <span class="required">*</span>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">File Data Excel <span class="required">*</span>
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <?php #echo form_input('email'); ?>
-                <input type="text" name="nama" required="required" class="form-control col-md-7 col-xs-12">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Jabatan <span class="required">*</span>
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-                <?php #echo form_input('password',$pegawai[0]->password); ?>
-                <input type="text" name="jabatan" required="required" class="form-control col-md-7 col-xs-12">
+                    <div style="position:relative;">
+        <a class='btn btn-primary' href='javascript:;'>
+            Choose File...
+            <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="fileImport" size="40"  onchange='$("#upload-file-info").html($(this).val());'>
+        </a>
+        &nbsp;
+        <span class='label label-info' id="upload-file-info"></span>
+</div>
             </div>
         </div>
 
@@ -44,12 +23,11 @@
 
     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
       <button type="submit" id="submit_" class="btn btn-success">Proses</button>
-      <button type="reset" class="btn btn-primary">Reset</button>
-      <button onclick="window.history.back()" class="btn btn-danger pull-right">Kembali</button>
+      <!-- <button onclick="window.history.back()" class="btn btn-danger pull-right">Kembali</button> -->
+      <!-- <button type="reset" class="btn btn-primary">Reset</button> -->
+      
   </div>
 </div>
-
-
-
+ 
 </div>
 </form>

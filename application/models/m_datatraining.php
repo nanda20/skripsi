@@ -5,7 +5,7 @@ class m_datatraining extends CI_Model {
 
   	public function all(){
 
-      	$q=$this->db->query("select * from datatraining");
+      	$q=$this->db->query("select * from datatraining ");
       	return $q;
     }
 
@@ -14,10 +14,24 @@ class m_datatraining extends CI_Model {
   	}
   	public function updateDataTraining($id,$label){
 			$data = array('label' => $label);
-
 			$this->db->where('id', $id);
 			$this->db->update('datatraining', $data); 
   	}
+    public function getStemm(){
+      return $this->db->query("SELECT count(id) stemm FROM `datatraining` WHERE stemming=0")->result();
+    }
+
+    public function getCountDocStemm(){
+
+        $q=$this->db->query("select count(*) getAllStemm from datastemming")->result();
+        return $q;
+    }
+
+    public function updateDataTrainingStemming($id){
+      $data = array('stemming' => 1);
+      $this->db->where('id', $id);
+      $this->db->update('datatraining', $data); 
+    }
 
     public function dataTraining(){
 

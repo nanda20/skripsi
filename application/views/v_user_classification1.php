@@ -1,8 +1,6 @@
+<br>
 
-
-    
-
-  <form action="<?= base_url('onlinecrawling/tambahdatacrawling/') ?>" method="post" id="form-login" data-parsley-validate class="form-horizontal form-label-left">
+ <form action="<?= base_url('onlinecrawling/tambahdatacrawling/') ?>" method="post" id="form-login" data-parsley-validate class="form-horizontal form-label-left">
 <div class="form-group">
 
 
@@ -34,7 +32,7 @@ $access_token_secret = "5b28o3rPpvOPmZOcgi87AdAcCUvLGca8gK1vQ0SPoeY6Y";
 $twitter = new TwitterOAuth($consumer_key,$consumer_secret,$access_token,$access_token_secret);
 
 // $tweets = $twitter->get('https://api.twitter.com/1.1/search/tweets.json?q=ptkai&result_type=recent&count=100');
-$tweets = $twitter->get('https://api.twitter.com/1.1/search/tweets.json?q=ptkai&result_type=recent&count=100');
+$tweets = $twitter->get('https://api.twitter.com/1.1/search/tweets.json?q=ptkai&result_type=recent&count=100&tweet_mode=extended&result_type=recent&retweeted_status=full_text');
 
 ?>
  <div class="table-responsive">
@@ -42,47 +40,50 @@ $tweets = $twitter->get('https://api.twitter.com/1.1/search/tweets.json?q=ptkai&
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">user name</th>
-      <th scope="col">tweet</th>
-      <th scope="col">Filter</th>
+      <th scope="col">User name</th>
+      <th width="15%" scope="col">Created at</th>
+      <th scope="col">Tweet</th>
+      <th scope="col">Label</th>
     </tr>
   </thead>
   <tbody>
 
 <?php 
+// print_r($tweets->statuses[2]->retweet_count);
+	// print_r($tweets->statuses[2]->retweeted_status->full_text);
 $i=0;
 // echo $tweets->statuses[0]->text;
-foreach ($tweets->statuses as $key => $tweet) { 
+foreach ($tweets->statuses as $tweet) { 
     
     ?>
     <tr>
+    <?php  if(date_format(date_create($tweet->created_at),"Y-m-d") == date("Y-m-d") ){ ?>
       <th scope="row"><?= ($i+1) ?></th>
       <td><?= $tweet->user->screen_name; ?></td>
-      <td>
-        <?= $tweet->text; ?>
-        <input type="hidden" name='tweet<?=$i?>' class="form-control" value="<?= $tweet->text; ?>"/> 
-         <input type="hidden" name='user<?=$i?>' class="form-control" value="<?= $tweet->user->screen_name; ?>"/> 
-      </div>  
+      <td><?= date_format(date_create($tweet->created_at),"Y-m-d H:i:s"); ?></td>
+      <td> <?php 
+      		if($tweet->retweet_count>0){
+     		echo $tweet->retweeted_status->full_text;
+      	}else{
+      		echo $tweet->full_text;
+      	}
+      	; ?></div>  
       </td>
-      <td>
-       <div class="custom-control custom-checkbox">
-          <input type="checkbox" name='check<?=$i?>' class="custom-control-input" > 
-
-        </div>
-      </td>
+      <td></td>
     </div>
     </tr>
 
     <!-- <img src="<?=$tweet->user->profile_image_url; ?>" /> -->
     
     <?php 
+	}
     $i++;}
      ?>
      <input type="hidden" name='tweetQty' class="custom-control-input" value="<?=($i-1)?>"> 
     </tbody>
 </table>
 </div>
-    <button type="submit" id="submit_" class="btn btn-success">Insert</button>
+    <!-- <button type="submit" id="submit_" class="btn btn-success">Insert</button> -->
 
 </div>
 </form>
@@ -91,3 +92,7 @@ foreach ($tweets->statuses as $key => $tweet) {
 </div>
 </div>
 </div>
+
+</div>
+</boody>
+ 

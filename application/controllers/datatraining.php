@@ -22,19 +22,205 @@ class datatraining extends CI_Controller {
 		$this->load->view('template/footer');
 	}
 
+	public function testExcel(){
+		$this->load->library('PHPexcel');
+		if ($this->input->post('file_source')) {
+
+			echo "file terimport";
+		}
+
+		// $this->load->library('excel_reader');
+
+		// Read the spreadsheet via a relative path to the document
+		// for example $this->excel_reader->read('./uploads/file.xls');
+		// $this->excel_reader->read('./uploads/Book1.xlsx');
+
+		// // Get the contents of the first worksheet
+		// $worksheet = $this->excel_reader->sheets[0];
+
+		// $numRows = $worksheet['numRows']; // ex: 14
+		// $numCols = $worksheet['numCols']; // ex: 4
+		// $cells = $worksheet['cells']; // 
+	}
 	//tambah data training
-	public function tambahdataexcel(){
+	public function viewaddexcel(){
 		
 		$data['title'] = 'Tambah Data';
 		$data['header'] = '';
 		$data['script'] = '';
 		$data['content'] = $this->load->view('v_datatrainingtambah','', true);
 		$this->template($data);
+
+
+
 		
 	}
 
-	public function viewtraining(){
+	public function progress(){
+
+		$this->load->helper('url');
+		$this->load->library('session');
+		$this->config->item('base_url');
+		$this->load->library('chisquare');
+			$path= __DIR__;
+			$new_path= dirname($path,2);
+
+			// require_once(APPPATH.'controllers/chisquare.php'); //include controller
+   //          $chisquare = new chisquare();  
+   //          $chisquare->processnaivebayes();
+
+
+        		// echo date_format(date_create("Thu May 24 16:03:30 +0000 2018"),"Y-m-d H:i:s");
+
+			// include('application\helpers\chisquare.php');
+			
+			// $this->load->library('session');
+			// $this->load->library('../controllers/chisquare.php');
+
+
+
+            //create object 
+
+            // $this->_ci_load_library($class.'/'.$class, $params, $object_name);
+            // $aObj->custom_a();
+
+				// $new_path.'/application/controllers/chisquare.php';
+
+				// if (file_exists($new_path) && is_file($new_path)) {
+
+			 //            @include_once($new_path);
+			 //            echo "found";
+			 //        } else{
+				// 		echo "n Found";
+			 //        }
+
+				// $chisquare = new chisquare();
+
+		 
+			// echo "
+
+			// <style>
+			// #myProgress {
+			//   width: 100%;
+			//   background-color: #ddd;
+			// }
+
+			// #myBar {
+			//   width: 10%;
+			//   height: 30px;
+			//   background-color: #4CAF50;
+			//   text-align: center;
+			//   line-height: 30px;
+			//   color: white;
+			// }
+			// </style>
+			// <body>
+
+		 
+
+
+			//   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+			//   <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+			//   <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+
+
+
+			// 	<div id='myProgress'  >
+			// 		  <div id='myBar' role='progressbar'>10%</div>
+			// 	</div>
+
+			// <br>
+			// <button onclick='move()'>Click Me</button> 
+
+			// <script>
+			
+
+			// function move() {
+			//   var elem = document.getElementById('myBar');   
+			//   var width = 10;
+			//   var id = setInterval(frame, 10);
+			//   function frame() {
+			//     if (width >= 100) {
+			//       clearInterval(id);
+			//     } else {
+			//       width++; 
+			//       elem.style.width = width + '%'; 
+			//       elem.innerHTML = width * 1  + '%';
+			//     }
+			//   }
+			// }
+			// </script>
+			
+			// ";
+	}
+
+	public function processexcel(){
+
+
+
+		$this->load->library('PHPexcel');
+		$this->load->library('upload'); 
+
+
+		$fileName = time() . $_FILES['fileImport']['name'];                     // Sesuai dengan nama Tag Input/Upload
+        $config['upload_path'] = (FCPATH.'upload/');                                // Buat folder dengan nama "fileExcel" di root folder
+        $config['file_name'] = $fileName;
+        $config['allowed_types'] = 'xls|xlsx|csv';
+        $config['max_size'] = 10000;
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+        if (!$this->upload->do_upload('fileImport'))
+        {
+            echo $this->upload->display_errors();
+        }else{
+
+        $media = $this->upload->data('fileImport');
+        $inputFileName = './fileExcel/' . $media['file_name'];
+
+
+
+		$file=(FCPATH.'upload/'.str_replace(" ","_",$fileName));
 		
+		$excelReader = PHPExcel_IOFactory::createReaderForFile($file);
+		$excelReader->setReadDataOnly(true);
+		$objXLS = $excelReader->load($file);
+
+
+		$worksheet = $objXLS->getSheet(0);
+		$lastRow = $worksheet->getHighestRow();
+		
+		// echo "<table>";
+		// $this->progress();
+		for ($row = 2; $row <= $lastRow; $row++) {
+			$data=array('id'=>null,
+						'createdAt'=> date_format(date_create($worksheet->getCell('A'.$row)->getValue()),"Y-m-d H:i:s"),
+						'username'=>$worksheet->getCell('B'.$row)->getValue(),
+						'tweet'=>$worksheet->getCell('C'.$row)->getValue(),
+						'label'=>$worksheet->getCell('D'.$row)->getValue(),);
+			$this->db->insert('datatraining',$data);
+
+			 // echo "<tr><td>";
+			 // echo $worksheet->getCell('A'.$row)->getValue();
+			 // echo "</td><td>";
+			 // echo $worksheet->getCell('B'.$row)->getValue();
+			 // echo "</td><td>";
+			 // echo $worksheet->getCell('C'.$row)->getValue();
+			 // echo "</td><td>";
+			 // echo $worksheet->getCell('D'.$row)->getValue();
+			 // echo "</td><tr>";
+		}
+		// echo "</table>";	
+
+		}
+		redirect('datatraining/viewtraining','refresh');
+	}
+
+	public function viewtraining(){
+		$value["getStemm"]=$this->m_datatraining->getStemm();
+				// $value["getStemm"][0]->stemm;
+		$this->session->set_userdata('getStemm', $value["getStemm"][0]->stemm);
+
+
 		$value["data"]=$this->m_datatraining->all();
 
 		$data['title'] = 'Data Training';
@@ -42,19 +228,19 @@ class datatraining extends CI_Controller {
 		$data['content'] = $this->load->view('v_datatraining', $value, true);
 		$data['script'] = '';
 		$this->template($data);
+
 	}
+
 	public function insertlabel($id,$label){
 		$this->m_datatraining->updateDataTraining($id,$label);
 		redirect('datatraining/viewtraining');
 	}
 	
 	public function processstimming(){
-				$stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
+			$stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
 			$stemmer  = $stemmerFactory->createStemmer();
-
+				
 			$data=$this->m_datatraining->datatraining();
-
-	 
 
 			$stopwords = $this->load->file("./stopwords.txt", TRUE);
 			$stopwordsList = explode("\n", $stopwords);
@@ -79,22 +265,60 @@ class datatraining extends CI_Controller {
 						}	
 					}
 				}
-			
+				
 				$dataStemm=array('id'=>null,'username'=>$dataTraining->username,'tweet'=>$clearTweet,'label'=>$dataTraining->label);
 				$this->m_datatraining->insertDataStemming($dataStemm);
+				$this->m_datatraining->updateDataTrainingStemming($dataTraining->id);
 				$clearTweet="";
 				echo "<br>";
 			}
+
+			$this->processfeatures();
+			redirect('datatraining/viewstemming');							
+
 	}
 
 	public function viewstemming(){
 				$value["data"]=$this->m_datatraining->allDataStemming();
-
+				$value["getStemm"]=$this->m_datatraining->getStemm();
+				$value["getAllStemm"]=$this->m_datatraining->getCountDocStemm();
+				
+				$this->session->set_userdata('getStemm', $value["getStemm"][0]->stemm);
 				$data['title'] = 'Data Stemming';
 				$data['header'] = '';
 				$data['content'] = $this->load->view('v_datastemming', $value, true);
 				$data['script'] = '';
 				$this->template($data);
+
+				
+				if($this->input->post('submit')){
+					 
+					//  echo '
+					// 	  <!-- Modal -->
+					// 	  <div class="modal fade" id="myModal" role="dialog">
+					// 	    <div class="modal-dialog">
+						    
+					// 	      <!-- Modal content-->
+					// 	      <div class="modal-content">
+					// 	        <div class="modal-header">
+					// 	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					// 	          <h4 class="modal-title">Modal Header</h4>
+					// 	        </div>
+					// 	        <div class="modal-body">
+					// 	          <p>Some text in the modal.</p>
+					// 	        </div>
+					// 	        <div class="modal-footer">
+					// 	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					// 	        </div>
+					// 	      </div>
+						      
+					// 	    </div>
+					// 	  </div>
+					// ';
+					$this->processstimming();
+					
+				}
+
 			
 	}
 
@@ -119,47 +343,47 @@ class datatraining extends CI_Controller {
 			return array('terms'=>$terms,'jml'=>$jumlah);
 	}
 
-	public function datafeatures(){
+		public function processfeatures(){
 
 
-		$label = array("positif", "negatif", "netral");
+					$label = array("positif", "negatif", "netral");
 
-		for ($iLabel=0; $iLabel < count($label) ; $iLabel++) { 
-				
-			
-		$dataStemming= $this->m_datatraining->allDataStemmingByLabel($label[$iLabel]);
-		$stemmArray=array();
+					for ($iLabel=0; $iLabel < count($label) ; $iLabel++) { 
+							
+						
+					$dataStemming= $this->m_datatraining->allDataStemmingByLabel($label[$iLabel]);
+					$stemmArray=array();
 
-		$y=0;
-			foreach ($dataStemming as $value) {
-				
-				$tweet = explode(" ", $value['tweet']);
-				for ($i=0; $i < count($tweet); $i++) { 
-					$stemmArray[$y]=$tweet[$i];
-					$y++;			
-				}
+					$y=0;
+						foreach ($dataStemming as $value) {
+							
+							$tweet = explode(" ", $value['tweet']);
+							for ($i=0; $i < count($tweet); $i++) { 
+								$stemmArray[$y]=$tweet[$i];
+								$y++;			
+							}
 
-			}
-			// echo str_word_count($dataStemming[0]['tweet']);
-			 
-			 $d = array_count_values($stemmArray);
-			 foreach ($d as $key => $frequency) {
-			 	if($key !=''){
-			 		// echo '('.$key.'='.$frequency.')';
-			 		// echo $label[$iLabel];
+						}
+						// echo str_word_count($dataStemming[0]['tweet']);
+						 
+						 $d = array_count_values($stemmArray);
+						 foreach ($d as $key => $frequency) {
+						 	if($key !=''){
+						 		// echo '('.$key.'='.$frequency.')';
+						 		// echo $label[$iLabel];
 
-			 		$datafeatures=array('id'=>null,'feature'=>$key,'frequency'=>$frequency,'label'=>$label[$iLabel]);
-			 		$this->m_datatraining->insertDataFeature($datafeatures);
-			 	}
+						 		$datafeatures=array('id'=>null,'feature'=>$key,'frequency'=>$frequency,'label'=>$label[$iLabel]);
+						 		$this->m_datatraining->insertDataFeature($datafeatures);
+						 	}
 
-			 }
+						 }
 
-			
-			}
-			// $datafeatures=array('id'=>null,'feature'=>'minangkabau','frequency'=>2,'label'=>'positif');
-			// $this->m_datatraining->insertDataFeature($datafeatures);
+						
+						}
+						// $datafeatures=array('id'=>null,'feature'=>'minangkabau','frequency'=>2,'label'=>'positif');
+						// $this->m_datatraining->insertDataFeature($datafeatures);
 
-		}
+					}
 
 		public function viewdatafeature(){
 			
@@ -172,6 +396,8 @@ class datatraining extends CI_Controller {
 			$this->template($data);
 
 		}
+
+
 
 }
 

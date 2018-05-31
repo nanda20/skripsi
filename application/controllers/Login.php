@@ -14,25 +14,25 @@ class Login extends CI_Controller{
 	}
 
 	function index(){
-		// if ( $this->session->username != '' ) { // cek apakah sudah login? jika sudah, redirect ke halaman login
-		// 	redirect('login/berhasil');
-		// }
-		// else{	// jika belum, maka ke form login
-		// 	$this->load->view('login_view');
-		// }
+		if ( $this->session->username != '' ) { // cek apakah sudah login? jika sudah, redirect ke halaman login
+			redirect('login/berhasil');
+		}
+		else{	// jika belum, maka ke form login
+			$this->load->view('v_login');
+		}
 	}
 
 
-	function cek(){
+	function ceking(){
 		$username = addslashes($this->input->post('username'));
 		$password = addslashes(md5($this->input->post('password')));
 		#echo $password;
 		// get data from database
-		$cek = $this->login->select_by($username, $password);
+		$cek = $this->db->query("select * from login where username='".$username."' and password='".$password."' ")->result();
 
-		echo $cek;
+		
 
-		if ($cek == 1) {
+		if (count($cek) == 1) {
 			// session aktif
 			$this->session->username = $username;
 			// redirect
@@ -49,7 +49,7 @@ class Login extends CI_Controller{
 			redirect('login/index');
 		}
 		else{
-			redirect('beranda');
+			redirect('home');
 		}
 	}
 

@@ -13,6 +13,7 @@ class chisquare extends CI_Controller {
 		
 	}
 
+
 	public function template($data)
 	{
 		$this->load->view('template/header', $data);
@@ -22,17 +23,24 @@ class chisquare extends CI_Controller {
 	}
 	public function viewcorpus(){
 
+
+		
 		$data['title'] = 'Chi Square';
 		$data['header'] = '';
 		$data['script'] = '';
 		$value['data'] = $this->m_chisquare->allDataCorpus();
+		$value['allChiSquare']=$this->m_chisquare->allChiSquare();
 		$data['content'] = $this->load->view('v_datacorpus',$value, true);
 		$this->template($data);
+
+		if($this->input->post('submit')){
+			$this->processchisquare();
+		}
 	}
 
 	public function processchisquare(){
 	 		
-		$Qterm= $this->db->query("select * from datafeature ")->result();
+		$Qterm= $this->db->query("select * from datafeature where chisquare=0 ")->result();
 		$value['data']= array();
 		$i=1;
 		//reading data from database each sentences
@@ -42,15 +50,16 @@ class chisquare extends CI_Controller {
 			
 					$result = $this->counting_chi($i,$value->feature,$value->label);
 			 
-			 // echo $result;
+			 // echo $result.'<br>';
 				if($result >=2.70554 ){
 
 					$data=array('id' =>null ,'feature'=>$value->feature,'frequency'=>$value->frequency,'label'=>$value->label,'valueChiSquare'=>$result);
 					// echo $y++.' - '.$data['feature'].' - '. $data['label'] .' '.$data['valueChiSquare'].'<br>';
-					// array_push($hasil,$data); 
-					// print_r($result);
+				// 	// array_push($hasil,$data); 
+				// 	// echo $data;
 					$this->m_chisquare->insertCorpus($data);
 				}
+				$this->m_chisquare->updateFeatureStatus($value->id);
 			$i++;
 		}
 
@@ -67,6 +76,7 @@ class chisquare extends CI_Controller {
 
 		// $data['content'] =  $this->load->view('v_processchisquare',$value, true);
 		// $this->template($data);
+		// redirect('chisquare/viewcorpus','refresh');
 	}
 
 

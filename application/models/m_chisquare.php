@@ -9,9 +9,22 @@ class m_chisquare extends CI_Model {
       	return $q;
 
 	}
+
+	public function allChiSquare()
+	{
+		$q=$this->db->query("select count(*) as allChiSquare from datafeature where chisquare=0")->result();
+      	return $q;
+
+	}
+
 	public function insertCorpus($data){
 		// print_r($data);
 		$this->db->insert('datacorpus',$data);
+	}
+	public function updateFeatureStatus($id){
+		$this->db->set('chisquare', 1);
+		$this->db->where('id', $id);
+		$this->db->update('datafeature'); 
 	}
 
 }

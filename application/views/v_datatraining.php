@@ -27,7 +27,7 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>Data Training <small>-</small></h2>
-            
+                
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -43,10 +43,10 @@
                 <thead>
                 <tr>
                     <td>No.</td>
-                    <td>id</td>
                     <td>username</td>
                     <td>tweet</td>
                     <td>label</td>
+                    <td>stemming</td>
                     ";
                     // <td>Proses</td>
                     echo "
@@ -57,7 +57,6 @@
                 foreach ($data->result() as $row) {
                     echo"<tr>
                     <td>".$i."</td>
-                    <td>".$row->id."</td>
                     <td>".$row->username."</td>
                     <td>".$row->tweet."</td>
                     <td>"?>
@@ -78,7 +77,9 @@
                         <a href="<?= site_url('/datatraining/insertlabel').'/'.$row->id.'/netral' ?>">netral</a>
                         </label>
                 
-                    </td></tr>
+                    </td>
+                    <td><?php if($row->stemming==1){echo "yes";}else{echo "no"; } ?></td>
+                    </tr>
                     <?php
 
                 $i++;
