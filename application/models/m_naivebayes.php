@@ -8,6 +8,22 @@ class m_naivebayes extends CI_Model {
 		$q=$this->db->query("select * from datanb");
       	return $q;
 	}
+	
+	public function truncateNb(){
+		$this->db->truncate('datanb'); 
+	}
+
+	function updateDataTraining($data){
+		$this->db->where('id', $data['id']);
+		$value=array('nilaiPositif'=>$data['nilai'][0],
+					'nilaiNegatif'=>$data['nilai'][1],
+					'nilaiNetral'=>$data['nilai'][2],
+					'labelNB'=>$data['labelMax']);
+
+   		$this->db->update('datatesting', $value); 
+		
+		// $this->db->update('datatesting',$data);
+	}
 
 	
 

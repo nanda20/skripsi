@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class datatraining extends CI_Controller {
+class DataTraining extends CI_Controller {
 
 	public function __construct()
 	{
@@ -13,6 +13,8 @@ class datatraining extends CI_Controller {
 
 		require_once $new_path.'/vendor/autoload.php';
 	}
+
+	
 	 
 	public function template($data)
 	{
@@ -43,28 +45,22 @@ class datatraining extends CI_Controller {
 		// $cells = $worksheet['cells']; // 
 	}
 	//tambah data training
-	public function viewaddexcel(){
+	public function viewAddExcel(){
 		
 		$data['title'] = 'Tambah Data';
 		$data['header'] = '';
 		$data['script'] = '';
-		$data['content'] = $this->load->view('v_datatrainingtambah','', true);
-		$this->template($data);
-
-
-
-		
+		$data['content'] = $this->load->view('v_datatrainingimport','', true);
+		$this->template($data);	
 	}
 
 	public function progress(){
-
 		$this->load->helper('url');
 		$this->load->library('session');
 		$this->config->item('base_url');
-		$this->load->library('chisquare');
+		// $this->load->library('chisquare');
 			$path= __DIR__;
 			$new_path= dirname($path,2);
-
 			// require_once(APPPATH.'controllers/chisquare.php'); //include controller
    //          $chisquare = new chisquare();  
    //          $chisquare->processnaivebayes();
@@ -154,7 +150,7 @@ class datatraining extends CI_Controller {
 			// ";
 	}
 
-	public function processexcel(){
+	public function processExcel(){
 
 
 
@@ -193,7 +189,8 @@ class datatraining extends CI_Controller {
 		// $this->progress();
 		for ($row = 2; $row <= $lastRow; $row++) {
 			$data=array('id'=>null,
-						'createdAt'=> date_format(date_create($worksheet->getCell('A'.$row)->getValue()),"Y-m-d H:i:s"),
+						// 'createdAt'=> date_format(date_create($worksheet->getCell('A'.$row)->getValue()),"Y-m-d H:i:s"),
+						'createdAt' =>$worksheet->getCell('A'.$row)->getValue(),
 						'username'=>$worksheet->getCell('B'.$row)->getValue(),
 						'tweet'=>$worksheet->getCell('C'.$row)->getValue(),
 						'label'=>$worksheet->getCell('D'.$row)->getValue(),);
@@ -212,10 +209,10 @@ class datatraining extends CI_Controller {
 		// echo "</table>";	
 
 		}
-		redirect('datatraining/viewtraining','refresh');
+		redirect('DataTraining/viewTraining','refresh');
 	}
 
-	public function viewtraining(){
+	public function viewTraining(){
 		$value["getStemm"]=$this->m_datatraining->getStemm();
 				// $value["getStemm"][0]->stemm;
 		$this->session->set_userdata('getStemm', $value["getStemm"][0]->stemm);
@@ -234,6 +231,17 @@ class datatraining extends CI_Controller {
 	public function insertlabel($id,$label){
 		$this->m_datatraining->updateDataTraining($id,$label);
 		redirect('datatraining/viewtraining');
+	}
+
+	public function testStemming(){
+
+			$stopwords = $this->load->file("./stopwords.txt", TRUE);
+			$stopwordsList = explode("\n", $stopwords);
+			$stopwordsListNoSpace =preg_replace("/\s+/",'',$stopwordsList);
+			echo in_array("nya",$stopwordsListNoSpace);
+			// $stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
+			// $stemmer  = $stemmerFactory->createStemmer();
+			// echo $stemmer->stem("Apresiasi Tinggi untuk #PTKAI #INKA gerbong harina nya baru sabi nyaman bot kaya di pesawat");
 	}
 	
 	public function processstimming(){
@@ -273,12 +281,12 @@ class datatraining extends CI_Controller {
 				echo "<br>";
 			}
 
-			$this->processfeatures();
-			redirect('datatraining/viewstemming');							
+			// $this->processfeatures();
+			// redirect('DataTraining/viewStemming');							
 
 	}
 
-	public function viewstemming(){
+	public function viewStemming(){
 				$value["data"]=$this->m_datatraining->allDataStemming();
 				$value["getStemm"]=$this->m_datatraining->getStemm();
 				$value["getAllStemm"]=$this->m_datatraining->getCountDocStemm();
@@ -316,6 +324,10 @@ class datatraining extends CI_Controller {
 					// 	  </div>
 					// ';
 					$this->processstimming();
+					$this->processfeatures();
+					
+					redirect('ChiSquare/processchisquare');	
+					// redirect('DataTraining/viewStemming');	
 					
 				}
 
@@ -332,6 +344,7 @@ class datatraining extends CI_Controller {
 			$tweet_no_username=preg_replace('/@\w+/', " ", $tweet_no_enter_no_scolon);
 			$tweet_no_hastag = preg_replace('/(?:#\s*[\w\d]+|@\s*[\w\d]+)/', " ", $tweet_no_username); 
 			$tweet_no_https= preg_replace('/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/', " ", $tweet_no_hastag);
+			
 			$tweet_no_number =preg_replace('/ ?\b[^ ]*[0-9][^ ]*\b/i', " ", $tweet_no_https);
 			$tweet_clear = preg_replace('/[^a-zA-Z0-9 ]/', " ", $tweet_no_number);
 			// return $tweet_clear;
@@ -385,7 +398,7 @@ class datatraining extends CI_Controller {
 
 					}
 
-		public function viewdatafeature(){
+		public function viewDataFeature(){
 			
 			$value["data"]=$this->m_datatraining->allDataFeature();
 

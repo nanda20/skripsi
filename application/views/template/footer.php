@@ -1,7 +1,7 @@
 <!-- footer content -->
 <footer>
   <div class="pull-right">
-    PLN Area Klaten Rayon Tulung - Website ini milik PLN Area Klaten Rayon Tulung
+    <!-- PLN Area Klaten Rayon Tulung - Website ini milik PLN Area Klaten Rayon Tulung -->
   </div>
   <div class="clearfix"></div>
 </footer>

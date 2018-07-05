@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class chisquare extends CI_Controller {
+class ChiSquare extends CI_Controller {
 
 	public function __construct()
 	{
@@ -21,7 +21,7 @@ class chisquare extends CI_Controller {
 		$this->load->view('template/content');
 		$this->load->view('template/footer');
 	}
-	public function viewcorpus(){
+	public function viewCorpus(){
 
 
 		
@@ -29,7 +29,7 @@ class chisquare extends CI_Controller {
 		$data['header'] = '';
 		$data['script'] = '';
 		$value['data'] = $this->m_chisquare->allDataCorpus();
-		$value['allChiSquare']=$this->m_chisquare->allChiSquare();
+		// $value['allChiSquare']=$this->m_chisquare->allChiSquare();
 		$data['content'] = $this->load->view('v_datacorpus',$value, true);
 		$this->template($data);
 
@@ -39,54 +39,50 @@ class chisquare extends CI_Controller {
 	}
 
 	public function processchisquare(){
-	 		
-		$Qterm= $this->db->query("select * from datafeature where chisquare=0 ")->result();
+	 	$this->m_chisquare->truncateCorpus();
+		$Qterm= $this->db->query("select * from datafeature")->result();
 		$value['data']= array();
 		$i=1;
-		//reading data from database each sentences
 		$y=1;
 		$hasil = array();	
 		foreach ($Qterm as $value) {
 			
 					$result = $this->counting_chi($i,$value->feature,$value->label);
 			 
-			 // echo $result.'<br>';
+			 // echo $i.' - '.$result.'<br>';
 				if($result >=2.70554 ){
 
 					$data=array('id' =>null ,'feature'=>$value->feature,'frequency'=>$value->frequency,'label'=>$value->label,'valueChiSquare'=>$result);
 					// echo $y++.' - '.$data['feature'].' - '. $data['label'] .' '.$data['valueChiSquare'].'<br>';
 				// 	// array_push($hasil,$data); 
 				// 	// echo $data;
+
+
 					$this->m_chisquare->insertCorpus($data);
 				}
-				$this->m_chisquare->updateFeatureStatus($value->id);
+				
 			$i++;
 		}
 
+		redirect('NaiveBayes/processnaivebayes');	
 		
-		
-		// $this->m_chisquare->insertCorpus($hasil);
-		// print_r($hasil);
-		// foreach ($hasil as $value) {
-		// 	echo $value['feature']."<br>";
-		// };
-		// echo $this->benchmark->elapsed_time();
-		 // echo $this->benchmark->memory_usage();
-		// print_r($value['data']);
-
-		// $data['content'] =  $this->load->view('v_processchisquare',$value, true);
-		// $this->template($data);
-		// redirect('chisquare/viewcorpus','refresh');
 	}
 
 
 	public function counting_chi($no,$term,$label){
+		//pengaruh
 		$A= $this->db->query("select count(*) as A from datastemming where label='".$label."' and tweet like '% ".$term."%' or  tweet like '%".$term." %' ")->result();
-		
-		$D= $this->db->query("select count(*) as D from datastemming where label !='".$label."' and tweet not in(select tweet from datastemming where tweet like '% ".$term."%' or tweet like '%".$term." %') ")->result();
+		// $A= $this->db->query("select frequency as A from datafeature where label='".$label."' and feature='".$term."' ")->result();
+		// echo $label.' '.$term;
 		$C= $this->db->query("select count(*) as C from datastemming where label ='".$label."' and tweet not in(select tweet from datastemming where tweet like '% ".$term."%' or tweet like '%".$term." %') ")->result();
+		$D= $this->db->query("select count(*) as D from datastemming where label !='".$label."' and tweet not in(select tweet from datastemming where tweet like '% ".$term."%' or tweet like '%".$term." %') ")->result();
 
-		$B= $this->db->query(" select count(*) as B from datastemming where label !='".$label."' and tweet in(select tweet from datastemming where tweet like '% ".$term."%' or tweet like '%".$term." %') ")->result();
+			// $D= $this->db->query("select count(*) as D from datastemming where label !='".$label."'  and tweet not in(select tweet from datastemming where tweet like ' ".$term."' or tweet like '".$term." ') ")->result();
+			
+		//pengaruh
+		$B= $this->db->query("select count(*) as B from datastemming where label !='".$label."' and tweet in(select tweet from datastemming where tweet like '% ".$term."%' or tweet like '%".$term." %') ")->result();
+		// $B= $this->db->query("SELECT count(*) as B FROM datastemming WHERE label !='".$label."' and tweet REGEXP '[[:<:]]".$term."[[:>:]]'")->result();
+			
 
 
 		$N= $this->db->query("select count(*) as N from datastemming ")->result();

@@ -1,9 +1,12 @@
+<title>Klasifikasi Tweet</title>
+
+
 <div class="">
     <div class="page-title">
         <div class="title_left">
           
         </div>
-
+    
 
 </div>
 <head>
@@ -46,13 +49,13 @@
                 <thead>
                 <tr>
                     <td>No.</td>
-                     
-                    <td>feature</td>
-                    ";
-                    // <td>Nilai Positif</td>
-                    // <td>Nilai Negatif</td>
-                    // <td>Nilai Netral</td>
-                    echo "<td>label</td>
+                    <td>User Name</td> 
+                    <td>Tweet</td>
+                    <td width='10%'>created at</td>
+                    <td>Nilai Positif</td>
+                    <td>Nilai Negatif</td>
+                    <td>Nilai Netral</td>
+                    <td>label</td>
                     
                     ";
                     // <td>Proses</td>
@@ -66,14 +69,15 @@
 
                     echo"<tr>
                     <td>".$i."</td>
-                    
+                    <td>".$row['username']."</td>
                     <td>".$row['tweet']."</td>
-                    <td>".$row['nilai'][0]."</td>
-                    <td>".$row['nilai'][1]."</td>
-                    <td>".$row['nilai'][2]."</td>";
+                    <td>"; echo date_format(date_create($row['created_at']),"Y-m-d H:i:s"); echo "</td>
+                    <td>".$row['nilaiPositif']."</td>
+                    <td>".$row['nilaiNegatif']."</td>
+                    <td>".$row['nilaiNetral']."</td>";
                     ?>
                     <td>
-                    <span class="label label-<?= (($row['labelMax']=='positif')? 'success': ($row['labelMax'] =='negatif' ? 'warning' : 'primary')) ?>" ><?=$row['labelMax'] ?></span>
+                    <span class="label label-<?= (($row['label']=='positif')? 'success': ($row['label'] =='negatif' ? 'warning' : 'primary')) ?>" ><?=$row['label'] ?></span>
                     </td>
                     <?php
                     // echo "<td>".$row['nilaiMax']."</td>";

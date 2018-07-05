@@ -12,7 +12,7 @@ class m_chisquare extends CI_Model {
 
 	public function allChiSquare()
 	{
-		$q=$this->db->query("select count(*) as allChiSquare from datafeature where chisquare=0")->result();
+		$q=$this->db->query("select count(*) as allChiSquare from datafeature ")->result();
       	return $q;
 
 	}
@@ -21,11 +21,14 @@ class m_chisquare extends CI_Model {
 		// print_r($data);
 		$this->db->insert('datacorpus',$data);
 	}
-	public function updateFeatureStatus($id){
-		$this->db->set('chisquare', 1);
-		$this->db->where('id', $id);
-		$this->db->update('datafeature'); 
+	public function truncateCorpus(){
+		$this->db->truncate('datacorpus'); 
 	}
+	// public function updateFeatureStatus($id){
+	// 	$this->db->set('chisquare', 1);
+	// 	$this->db->where('id', $id);
+	// 	$this->db->update('datafeature'); 
+	// }
 
 }
 

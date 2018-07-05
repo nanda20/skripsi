@@ -27,9 +27,6 @@
         <div class="x_panel">
             <div class="x_title">
              <!--    <h2>Data Training <small>-</small></h2> -->
-                
-
-	
 
         </div>
         Data Training = <?php echo $countData['countDataTraining'][0]->countDataTraining; ?>
@@ -41,7 +38,40 @@
         Data Corpus =<?php echo $countData['countDataCorpus'][0]->countDataCorpus; ?>
         <br>
         Data Feature =<?php echo $countData['countDataFeature'][0]->countDataFeature; ?>
+        
 
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">no</th>
+              <th scope="col">Training Positif</th>
+              <th scope="col">Training Negatif</th>
+              <th scope="col">Training Netral</th>
+              <th scope="col">Doc Feature</th>
+              <th scope="col">Doc NB</th>
+              <th scope="col">Jumlah Data Uji</th>
+              <th scope="col">Akurasi</th>
+            </tr>
+          </thead>
+          <tbody>
+                       
+        <?php 
+        $i=1;
+        foreach ($log as $value) {
+            echo "<tr>";
+            echo "<td>".$i++."</td>";
+            echo "<td>".$value->docPositif."</td>";
+            echo "<td>".$value->docNegatif."</td>";
+            echo "<td>".$value->docNetral."</td>";
+            echo "<td>".$value->docFeature."</td>";
+            echo "<td>".$value->docNaiveBayes."</td>";
+            echo "<td>".$value->docDataUji."</td>";
+            echo "<td>".$value->akurasi."% </td>";
+            echo "</tr>";
+        } ?>
+
+          </tbody>
+        </table>
     </div>
 </div>
 </div>

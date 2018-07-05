@@ -23,7 +23,7 @@
 <div class="clearfix"></div>
  
 
-<?php if($allChiSquare[0]->allChiSquare>0){ ?>
+<!-- <?php if($allChiSquare[0]->allChiSquare>0){ ?>
 <div class="alert alert-info alert-dismissible fade in">
   <strong>Info! Ada <?php echo $allChiSquare[0]->allChiSquare; ?> Feature Baru yang belum di proses  </strong> 
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -31,7 +31,7 @@
     <form action="<?= base_url('chisquare/viewcorpus');?>" method="post" accept-charset="utf-8">
         <button class="btn btn-primary" name="submit" value="submit" type="submit"  data-toggle="modal" data-target="#myModal">Process</button>    
     </form>
-<?php }?>
+<?php }?> -->
     
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">

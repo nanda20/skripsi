@@ -1,6 +1,6 @@
 
 
-        <form action="<?= base_url('datatraining/processexcel/') ?>" method="post" id="form-login" data-parsley-validate class="form-horizontal form-label-left" enctype="multipart/form-data">
+        <form action="<?= base_url('DataTraining/processExcel/') ?>" method="post" id="form-login" data-parsley-validate class="form-horizontal form-label-left" enctype="multipart/form-data">
            
 
         <div class="form-group">

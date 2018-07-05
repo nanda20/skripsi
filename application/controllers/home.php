@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class home extends CI_Controller {
+class Home extends CI_Controller {
 
 	public function index()
 	{
 		$this->load->model('m_home');
 		$data['countData']=$this->m_home->getData();
-
+		$data['log']=$this->m_home->getLogAll();
 		$data['title'] = 'Home';
 		$data['header'] = '';
 		$data['script'] = '';

@@ -25,48 +25,51 @@
       <div class="menu_section">
         <h3>General</h3>
         <ul class="nav side-menu">
-          <li><a href="<?= base_url('home')?>"><i class="fa fa-home"></i> Home</a></li>
+          <li><a href="<?= base_url('Home/index')?>"><i class="fa fa-home"></i> Home</a></li>
 
-        <li><a href="<?= base_url('onlinecrawling/tambahdatacrawling') ?>"> <i class="fa fa-home"></i> Online Crawling</a>
-        </li>
+        <!-- <li><a href="<?= base_url('onlinecrawling/tambahdatacrawling') ?>"> <i class="fa fa-home"></i> Online Crawling</a>
+        </li> -->
         
           <li><a><i class="fa fa-edit"></i> Data Training <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="<?= base_url('datatraining/viewtraining') ?>">Data Training</a></li>
+              <li><a href="<?= base_url('DataTraining/viewTraining') ?>">Data Training</a></li>
               </li>
-              <li><a href="<?= base_url('datatraining/viewstemming') ?>">Data Stemming  <?php 
+              <li><a href="<?= base_url('DataTraining/viewStemming') ?>">Data Stemming  <?php 
               if(isset($_SESSION['getStemm'])==1) {echo "<span class='badge'>".$_SESSION['getStemm'].' new </span>'; } ?></a></li>
               </li>
-              <li><a href="<?= base_url('datatraining/viewdatafeature') ?>">Data Features</a></li>
+              <li><a href="<?= base_url('DataTraining/viewDataFeature') ?>">Data Features</a></li>
               <!-- <li><a href="<?= base_url('chisquare/viewcorpus') ?>">Data Corpus</a></li> -->
-              <li><a href="<?= base_url('datatraining/viewaddexcel') ?>">Import Data excel</a></li>
+              <li><a href="<?= base_url('DataTraining/viewAddExcel') ?>">Import Data excel</a></li>
             </ul>
           </li>
 
           <li><a><i class="fa fa-edit"></i> Chi Square <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="<?= base_url('chisquare/viewcorpus') ?>">Lihat Data</a></li>
+              <li><a href="<?= base_url('ChiSquare/viewCorpus') ?>">Lihat Data</a></li>
               <!-- <li><a href="<?= base_url('chisquare/processchisquare') ?>">Hitung Chi Square</a></li> -->
             </ul>
           </li>
           <li><a><i class="fa fa-user-plus"></i> Naive Bayes <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="<?= base_url('naivebayes/viewnaivebayes') ?>">Lihat Data</a></li>
+              <li><a href="<?= base_url('NaiveBayes/viewNaiveBayes') ?>">Lihat Data</a></li>
             </ul>
           </li>
 
           <li><a><i class="fa fa-history"></i> Data Uji <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
-              <li><a href="<?= base_url('naivebayes/viewtesting') ?>">testing</a></li>
+            
+            <li><a href="<?= base_url('NaiveBayes/viewAddExcel') ?>">import</a></li>
+              <li><a href="<?= base_url('NaiveBayes/viewTesting') ?>">view Klasifikasi Naive Bayes</a></li>
+              <li><a href="<?= base_url('NaiveBayes/viewCompare') ?>">view Perbandingan</a></li>
 
             </ul>
           </li>
 
-          <li><a><i class="fa fa-shopping-cart"></i> Grafik <span class="fa fa-chevron-down"></span></a>
+          <!-- <li><a><i class="fa fa-shopping-cart"></i> Grafik <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="<?= base_url('transaksi/index') ?>">Lihat Grafik</a></li>
             </ul>
-          </li>
+          </li> -->
         </ul>
       </div>
 

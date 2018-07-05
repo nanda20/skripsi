@@ -40,6 +40,8 @@
 
                 <div class="clearfix"></div>
             </div>
+            Akurasi = <?= $akurasi ?>%,
+            <br>
             <?php
              
                 echo "<table id='datatable-responsive' class='table table-striped table-bordered dt-responsive table-hover'>
@@ -51,7 +53,8 @@
                     <td>Nilai Positif</td>
                     <td>Nilai Negatif</td>
                     <td>Nilai Netral</td>
-                    <td>label</td>
+                    <td>label NB</td>
+                    <td>label Manual</td>
                     
                     ";
                     // <td>Proses</td>
@@ -73,6 +76,9 @@
                     ?>
                     <td>
                     <span class="label label-<?= (($row['labelMax']=='positif')? 'success': ($row['labelMax'] =='negatif' ? 'warning' : 'primary')) ?>" ><?=$row['labelMax'] ?></span>
+                    </td>
+                    <td>
+                    <span class="label label-<?= (($row['labelManual']=='positif')? 'success': ($row['labelManual'] =='negatif' ? 'warning' : 'primary')) ?>" ><?=$row['labelManual'] ?></span>
                     </td>
                     <?php
                     // echo "<td>".$row['nilaiMax']."</td>";

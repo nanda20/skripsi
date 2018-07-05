@@ -15,7 +15,7 @@ class Login extends CI_Controller{
 
 	function index(){
 		if ( $this->session->username != '' ) { // cek apakah sudah login? jika sudah, redirect ke halaman login
-			redirect('login/berhasil');
+			redirect('Login/berhasil');
 		}
 		else{	// jika belum, maka ke form login
 			$this->load->view('v_login');
@@ -36,7 +36,13 @@ class Login extends CI_Controller{
 			// session aktif
 			$this->session->username = $username;
 			// redirect
-			redirect('login/berhasil');
+
+			if($cek[0]->level ==1){
+					redirect('Home');
+			} else{
+					redirect('User/index');
+			}
+			// redirect('login/berhasil');
 		}
 		else{
 			echo '<script language="JavaScript">alert("Gagal Login ! Pastikan Username dan Password Anda Benar");</script>';
@@ -49,7 +55,7 @@ class Login extends CI_Controller{
 			redirect('login/index');
 		}
 		else{
-			redirect('home');
+			redirect('Home');
 		}
 	}
 
