@@ -29,7 +29,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Testing Tweet Twitter <small> testing / data tweet  </small></h2>
+                <h2>Testing Klasifikasi Data Tweet <small> testing / data tweet  </small></h2>
             
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -40,7 +40,9 @@
 
                 <div class="clearfix"></div>
             </div>
-            Akurasi = <?= $akurasi ?>%,
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped" role="progressbar" style="<?php echo "width: $akurasi%" ?>" aria-valuenow="<?= $akurasi ?>" aria-valuemin="0" aria-valuemax="100"><?= $akurasi ?>%</div>
+            </div>
             <br>
             <?php
              

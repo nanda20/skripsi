@@ -188,7 +188,7 @@ class DataTraining extends CI_Controller {
 		// echo "<table>";
 		// $this->progress();
 		for ($row = 2; $row <= $lastRow; $row++) {
-			$data=array('id'=>null,
+			$data=array('idDataTraining'=>null,
 						// 'createdAt'=> date_format(date_create($worksheet->getCell('A'.$row)->getValue()),"Y-m-d H:i:s"),
 						'createdAt' =>$worksheet->getCell('A'.$row)->getValue(),
 						'username'=>$worksheet->getCell('B'.$row)->getValue(),
@@ -274,15 +274,17 @@ class DataTraining extends CI_Controller {
 					}
 				}
 				
-				$dataStemm=array('id'=>null,'username'=>$dataTraining->username,'tweet'=>$clearTweet,'label'=>$dataTraining->label);
+				$dataStemm=array('idDataStemming'=>null,'idDataTraining'=>$dataTraining->idDataTraining,'tweet'=>$clearTweet);
 				$this->m_datatraining->insertDataStemming($dataStemm);
-				$this->m_datatraining->updateDataTrainingStemming($dataTraining->id);
+				$this->m_datatraining->updateDataTrainingStemming($dataTraining->idDataTraining);
 				$clearTweet="";
 				echo "<br>";
 			}
 
-			// $this->processfeatures();
-			// redirect('DataTraining/viewStemming');							
+			$this->processfeatures();
+			$this->processchisquare();
+			$this->processnaivebayes();
+			redirect('DataTraining/viewStemming');							
 
 	}
 
@@ -299,40 +301,206 @@ class DataTraining extends CI_Controller {
 				$this->template($data);
 
 				
-				if($this->input->post('submit')){
-					 
-					//  echo '
-					// 	  <!-- Modal -->
-					// 	  <div class="modal fade" id="myModal" role="dialog">
-					// 	    <div class="modal-dialog">
-						    
-					// 	      <!-- Modal content-->
-					// 	      <div class="modal-content">
-					// 	        <div class="modal-header">
-					// 	          <button type="button" class="close" data-dismiss="modal">&times;</button>
-					// 	          <h4 class="modal-title">Modal Header</h4>
-					// 	        </div>
-					// 	        <div class="modal-body">
-					// 	          <p>Some text in the modal.</p>
-					// 	        </div>
-					// 	        <div class="modal-footer">
-					// 	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					// 	        </div>
-					// 	      </div>
-						      
-					// 	    </div>
-					// 	  </div>
-					// ';
-					$this->processstimming();
-					$this->processfeatures();
-					
-					redirect('ChiSquare/processchisquare');	
-					// redirect('DataTraining/viewStemming');	
-					
-				}
+				
 
 			
 	}
+	// public function process
+	// if($this->input->post('submit')){
+					 
+	// 					$this->processstimming();
+									
+					
+	// }
+
+	public function processchisquare(){
+		$this->load->model('m_chisquare');
+	 	$this->m_chisquare->truncateCorpus();
+		$Qterm= $this->db->query("select * from datafeature")->result();
+		$value['data']= array();
+		$i=1;
+		$y=1;
+		$hasil = array();	
+		foreach ($Qterm as $value) {
+					$result = $this->counting_chi($i,$value->feature,$value->label);
+			 // echo $i.' - '.$result.'<br>';
+				if($result >=2.70554 ){
+					$data=array('idDataCorpus' =>null ,'idDataFeature'=>$value->idDataFeature,'feature'=>$value->feature,'valueChiSquare'=>$result);
+					// echo $y++.' - '.$data['feature'].' - '. $data['label'] .' '.$data['valueChiSquare'].'<br>';
+				// 	// array_push($hasil,$data); 
+				// 	// echo $data;
+
+					$this->m_chisquare->insertCorpus($data);
+				}
+			$i++;
+		}
+		
+		// redirect('NaiveBayes/processnaivebayes');	
+	}
+
+	public function processnaivebayes()
+	{
+ 		$this->db->truncate('datanb'); 
+
+		$db= $this->db->query("select dc.idDataCorpus,dc.feature,df.frequency,df.label from datacorpus dc join dataFeature df on dc.idDataFeature=df.idDataFeature  ")->result();
+		
+
+		// echo "<br>";
+		$V =  $this->db->query("select count(DISTINCT feature) as count from datacorpus ")->result();
+		// print_r($V[0]->count);
+		$i=1;
+		foreach ($db as $value) {
+
+			// $nc = $this->db->query("select count(df.frequency) as count from datacorpus dc join dataFeature df on dc.idDataFeature=df.idDataFeature where df.label='".$value->label."' ")->result();
+
+			$nc = $this->db->query("select sum(df.frequency) as count from datacorpus dc join dataFeature df on dc.idDataFeature=df.idDataFeature where df.label='".$value->label."' ")->result();
+			$nbValue=(($value->frequency+1)/($nc[0]->count+$V[0]->count));
+
+			echo $i.' '.$value->feature.' '. $value->label .' | Tct=' .$value->frequency.' | λ = 1'.' | Nc = '.$nc[0]->count.' | V='.$V[0]->count.' Probability = '.$nbValue.'</br>';
+			$i++;
+
+			$data=array('id'=>null,'feature'=>$value->feature,'frequency'=>$value->frequency,'label'=>$value->label,'naivebayesvalue'=>$nbValue);
+			$this->db->insert('datanb',$data);
+		}
+
+		// $this->viewStemming();
+
+		redirect('DataTraining/viewTraining');		
+	}
+
+	public function countA($label,$terms){
+		$A=$this->db->query("select dt.label,ds.tweet from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label='$label'")->result();
+		$ATweet="";
+		$countTotalA=0;
+		foreach ($A as $values) {
+			// echo $values->tweet.'<br>';
+			$count=0;
+			$AWords = explode(" ", $values->tweet);
+
+			if(in_array($terms,$AWords)){
+				$countTotalA +=1;
+			}
+		}
+		return $countTotalA;
+
+	}
+
+	public function countB($label,$terms){
+		$B=$this->db->query("select dt.label,ds.tweet from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label !='$label'")->result();
+		$BTweet="";
+		$countTotalB=0;
+		foreach ($B as $values) {
+			// echo $values->tweet.'<br>';
+			$count=0;
+			$BWords = explode(" ", $values->tweet);
+			for ($i=0; $i < count($BWords) ; $i++) { 
+				if($BWords[$i]==$terms){
+					$count	++;
+				}
+			}
+			if($count>0){
+				// $count=1;
+				$countTotalB +=1;
+			}
+
+		}
+		return $countTotalB;
+
+	}
+
+	public function countC($label,$terms){
+			$C=$this->db->query("select dt.label,ds.tweet from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label='$label'")->result();
+			$CTweet="";
+			$countTotalC=0;
+			foreach ($C as $values) {
+				// echo $values->tweet.'<br>';
+				$count=0;
+				$CWords = explode(" ", $values->tweet);
+
+				if(!in_array($terms,$CWords)){
+					$countTotalC +=1;
+				}
+			}
+			return $countTotalC;
+
+		}
+	public function countD($label,$terms){
+		$D=$this->db->query("select dt.label,ds.tweet from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label !='$label'")->result();
+		$DTweet="";
+		$countTotalD=0;
+		foreach ($D as $values) {
+			// echo $values->tweet.'<br>';
+			$count=0;
+			$DWords = explode(" ", $values->tweet);
+
+			if(!in_array($terms,$DWords)){
+				$countTotalD +=1;
+			}
+		}
+		return $countTotalD;
+
+	}
+	public function counting_chi($no,$term,$label){
+		//pengaruh
+
+		// $A = $this->countA($label,$term);
+
+		
+		
+		// $A= $this->db->query("select frequency as A from datafeature where label='".$label."' and feature='".$term."' ")->result();
+		// echo $label.' '.$term;
+		
+		// $A = $this->countA($label,$term);		
+
+		// $C = $this->countC($label,$term);
+
+		// $D = $this->countD($label,$term);
+
+		// $B = $this->countB($label,$term);
+
+		$A= $this->db->query("select count(*) as A from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label='".$label."' and ds.tweet like '% ".$term."%' or  ds.tweet like '%".$term." %' ")->result();
+
+		$C= $this->db->query("select count(*) as C from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label ='".$label."' and ds.tweet not in(select tweet from datastemming where tweet like '% ".$term."%' or ds.tweet like '%".$term." %') ")->result();
+
+		$D= $this->db->query("select count(*) as D from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where  dt.label !='".$label."' and ds.tweet not in(select tweet from datastemming where tweet like '% ".$term."%' or tweet like '%".$term." %') ")->result();
+
+		$B= $this->db->query("select count(*) as B from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label !='".$label."' and ds.tweet in(select tweet from datastemming where tweet like '% ".$term."%' or tweet like '%".$term." %') ")->result();
+
+
+		// $B = $this->countB($label,$term);
+		// print_r($B);
+		// $D= $this->db->query("select count(*) as D from datastemming where label !='".$label."'  and tweet not in(select tweet from datastemming where tweet like ' ".$term."' or tweet like '".$term." ') ")->result();
+			
+		//pengaruh
+		
+
+		// $B= $this->db->query("SELECT count(*) as B FROM datastemming WHERE label !='".$label."' and tweet REGEXP '[[:<:]]".$term."[[:>:]]'")->result();
+			
+		$N= $this->db->query("select count(*) as N from datastemming")->result();
+		
+		// echo $no." Term=>".$term.", Label=>".$label;
+		// echo "| A = ".$A;
+		// echo "| D = ".$D;
+		// echo "| C = ".$C;
+		// // echo "| B = ".$B[0]->B;
+		// echo "| B = ".$B;
+		// echo "| N = ".$N[0]->N;
+		
+		
+		// echo "| X^2 = ". $result=($N[0]->N * pow(($A[0]->A*$D[0]->D -$C[0]->C*$B[0]->B),2))/(($A[0]->A+$C[0]->C)*($B[0]->B+$D[0]->D)*($A[0]->A+$B[0]->B)*($C[0]->C+$D[0]->D));
+		// echo "</br>";
+
+		$result=($N[0]->N * pow(($A[0]->A*$D[0]->D -$C[0]->C*$B[0]->B),2))/(($A[0]->A+$C[0]->C)*($B[0]->B+$D[0]->D)*($A[0]->A+$B[0]->B)*($C[0]->C+$D[0]->D));
+
+
+		// echo "| X^2 = ". $result=($N[0]->N * pow(($A*$D -$C*$B),2))/(($A+$C)*($B+$D)*($A+$B)*($C+$D));
+		// echo "</br>";
+		
+		// $result=($N[0]->N * pow(($A*$D -$C*$B),2))/(($A+$C)*($B+$D)*($A+$B)*($C+$D));
+
+		return $result;
+	}
+
 
 	public function cleaningtweet($tweet){
 
@@ -384,8 +552,9 @@ class DataTraining extends CI_Controller {
 						 	if($key !=''){
 						 		// echo '('.$key.'='.$frequency.')';
 						 		// echo $label[$iLabel];
+						 		// echo '<br>';
 
-						 		$datafeatures=array('id'=>null,'feature'=>$key,'frequency'=>$frequency,'label'=>$label[$iLabel]);
+						 		$datafeatures=array('idDataFeature'=>null,'feature'=>$key,'frequency'=>$frequency,'label'=>$label[$iLabel]);
 						 		$this->m_datatraining->insertDataFeature($datafeatures);
 						 	}
 
@@ -396,6 +565,7 @@ class DataTraining extends CI_Controller {
 						// $datafeatures=array('id'=>null,'feature'=>'minangkabau','frequency'=>2,'label'=>'positif');
 						// $this->m_datatraining->insertDataFeature($datafeatures);
 
+						
 					}
 
 		public function viewDataFeature(){

@@ -78,7 +78,19 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'database' => 'sentimenanalis',
+	//  ----- Perhitungan Manual 5 data------
+	// 'database' => 'sentimenanalisManual',
+
+	//--------Perhitungan 450 Data Normal ---------
+	'database' => 'sentimenanalisData450',
+
+	// //--------Perhitungan Data Training 70%  ---------
+	// 'database' => 'sentimenanalisData315',
+
+	//--------Perhitungan Data Training Tidak Seimbang  ---------
+	// 'database' => 'sentimenanalisDataTdkSeimbang',
+
+
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

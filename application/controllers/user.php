@@ -28,7 +28,7 @@ class User extends CI_Controller {
 	public function chart(){
 
 		$this->load->model('m_user');
-		$data['val']=$this->m_user->getChart();
+		// $data['val']=$this->m_user->getChart();
 
 		// echo json_encode($data);
 		$this->load->view('v_user_header');
@@ -37,9 +37,11 @@ class User extends CI_Controller {
 
 	}
 
-	public function jsonChart(){
+	public function jsonChart($bln,$th)
+		{
+
 		$this->load->model('m_user');
-		$qvalue=$this->m_user->getChart();
+		$qvalue=$this->m_user->getChart($bln,$th);		
 		// print_r($qvalue['vpositif']);
 		// $data=array();
 		$i=0;
@@ -119,7 +121,7 @@ class User extends CI_Controller {
 			  'animationEnabled' => true,
 			  'title' => 
 			 array (
-			    'text' => 'Twitter Sentimen Analisis ',
+			    // 'text' => 'Grafik klasifikasi Tweet ',
 			  ),
 			  'axisY' => 
 			  array (

@@ -38,7 +38,7 @@ class Login extends CI_Controller{
 			// redirect
 
 			if($cek[0]->level ==1){
-					redirect('Home');
+					redirect('Home/index');
 			} else{
 					redirect('User/index');
 			}

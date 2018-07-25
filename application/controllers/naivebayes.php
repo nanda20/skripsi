@@ -39,8 +39,11 @@ class NaiveBayes extends CI_Controller {
 		// ------------------------------------------------------------------------------------------
 		// naive bayes klasifikasi
 
-		$Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` WHERE label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` WHERE label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` WHERE label='netral')as sumNetral")->result_array();
+		// $Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` WHERE label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` WHERE label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` WHERE label='netral')as sumNetral")->result_array();
 			
+
+		$Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` ds join 	datatraining dt on ds.idDataTraining =dt.idDataTraining  WHERE dt.label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` ds join datatraining dt on ds.idDataTraining =dt.idDataTraining WHERE dt.label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` ds join datatraining dt on ds.idDataTraining =dt.idDataTraining WHERE dt.label='netral')as sumNetral")->result_array();
+
 			$V=$Queryprob[0]['sumPositif']+$Queryprob[0]['sumNegatif']+$Queryprob[0]['sumNetral'];
 			$prob=array	($Queryprob[0]['sumPositif']/$V,$Queryprob[0]['sumNegatif']/$V,$Queryprob[0]['sumNetral']/$V);
 						
@@ -140,30 +143,7 @@ class NaiveBayes extends CI_Controller {
 	
 	}
 
-	public function processnaivebayes()
-	{
- 		$this->db->truncate('datanb'); 
-
-		$db= $this->db->query("select * from datacorpus ")->result();
-		
-
-		// echo "<br>";
-		$V =  $this->db->query("select count(DISTINCT feature) as count from datacorpus ")->result();
-		// print_r($V[0]->count);
-		$i=1;
-		foreach ($db as $value) {
-			$nc = $this->db->query("select count(frequency) as count from datacorpus where label='".$value->label."' ")->result();
-			$nbValue=(($value->frequency+1)/($nc[0]->count+$V[0]->count));
-
-			// echo $i.' '.$value->feature.' '. $value->label .' | Tct=' .$value->frequency.' | Nc = '.$nc[0]->count.' | V='.$V[0]->count.' Probability = '.$nbValue.'</br>';
-			$i++;
-
-			$data=array('id'=>null,'feature'=>$value->feature,'frequency'=>$value->frequency,'label'=>$value->label,'naivebayesvalue'=>$nbValue);
-			$this->db->insert('datanb',$data);
-		}
-
-		redirect('DataTraining/viewStemming');		
-	}
+	
 
 	public function template($data)
 		{
@@ -258,7 +238,9 @@ class NaiveBayes extends CI_Controller {
 	public function viewTesting(){
 		 	// error_reporting(E_ALL ^ E_NOTICE);
 
-			$Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` WHERE label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` WHERE label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` WHERE label='netral')as sumNetral")->result_array();
+			// $Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` WHERE label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` WHERE label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` WHERE label='netral')as sumNetral")->result_array();
+
+		$Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` ds join 	datatraining dt on ds.idDataTraining =dt.idDataTraining  WHERE dt.label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` ds join datatraining dt on ds.idDataTraining =dt.idDataTraining WHERE dt.label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` ds join datatraining dt on ds.idDataTraining =dt.idDataTraining WHERE dt.label='netral')as sumNetral")->result_array();
 			
 			
 
@@ -286,9 +268,12 @@ class NaiveBayes extends CI_Controller {
 							  "nilaiMax"=>max($hasilNB['nilai']),
 							  "labelManual"=>$value->labelManual
 							);
+				// print_r($hasil[$i]);
+
 				if($hasil[$i]['labelMax']==$hasil[$i]['labelManual']){
 					$jmlLabelCocok +=1;
 				}
+
 				$this->m_naivebayes->updateDataTraining($hasil[$i]);
 				
 				$i++;
@@ -327,7 +312,6 @@ class NaiveBayes extends CI_Controller {
 			$valueData['hasil'] = $hasil;
 			$data['title'] = 'Testing Tweet';
 			$data['header'] = '';
-			// if()
 			$data['content'] = $this->load->view('v_testing', $valueData, true);
 			$data['script'] = '';
 			$this->template($data);
@@ -337,9 +321,8 @@ class NaiveBayes extends CI_Controller {
 	}
 
  	public function viewCompare(){
- 		 
-
-			$Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` WHERE label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` WHERE label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` WHERE label='netral')as sumNetral")->result_array();
+ 		
+			$Queryprob=$this->db->query("SELECT (SELECT count(*) FROM `datastemming` ds join 	datatraining dt on ds.idDataTraining =dt.idDataTraining  WHERE dt.label='positif') as sumPositif ,(SELECT count(*) FROM `datastemming` ds join datatraining dt on ds.idDataTraining =dt.idDataTraining WHERE dt.label='negatif')as sumNegatif ,(SELECT count(*)  FROM `datastemming` ds join datatraining dt on ds.idDataTraining =dt.idDataTraining WHERE dt.label='netral')as sumNetral")->result_array();
 			
 			
 
@@ -466,6 +449,25 @@ class NaiveBayes extends CI_Controller {
 		 	echo $value.' ';
 		 }
 	}
+
+	public function cobaStemm(){
+		$stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
+		$stemmer  = $stemmerFactory->createStemmer();
+		$stopwords = $this->load->file("./stopwords.txt", TRUE);
+		$stopwordsList = explode("\n", $stopwords);
+		$stopwordsListNoSpace =preg_replace("/\s+/",'',$stopwordsList);
+		$sentence="Pertama kalinya naik kereta ekonomi antarkota. Suprisingly, nyaman. @PTKAI";
+		$clcn=$this->cleaningtweet($sentence);
+
+		foreach ($clcn['terms'] as $terms ) {
+					// echo empty($terms);
+					if (!in_array($stemmer->stem($terms),$stopwordsListNoSpace) && !empty($terms) ) {
+
+						 echo  $terms.' | ';
+						}
+
+		}
+	}
 	public function processtesting($tweet,$probC,$VQuery,$set){
 
 	        $stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
@@ -525,24 +527,25 @@ class NaiveBayes extends CI_Controller {
 
 
 								 
-								// echo '('.$label.' '.$i++.')';
-								 // echo  $terms.' | ';
-								 // echo ' Nct='.$tc.' + 1'.' / Nc='.$nc.' + V='.$V.') | ';
+								
+								 
 
 								 $hasil=(($tc+1)/($nc+$V));
-								 $nb =$nb * $hasil;
+								 $nb *=$hasil;
 								 // echo $nb.' | ';
-								 // echo $hasil.' | ';
+								 
+								 // echo  $terms.' | '.$label.' | ';
+								 // echo ' Nct='.$tc.' + 1'.' / Nc='.$nc.' + V='.$V.') | '.$hasil.' | ';
+								 // echo "<br>";
 							}
 							
 					 
 				}
 				
-				// echo $probC[$i];
-				  // ' ['.$label.'] '.($nb*$probC[$i]) ;
 				$AAlabel[$i]=$label;
 				$Anilai[$i]=$nb*$probC[$i];
 
+				// echo $Anilai[$i];
 				$i++;
 				// $i=0;
 				

@@ -16,10 +16,10 @@ class m_home extends CI_Model {
 		}
 
 		function getLog(){
-			$data["docPositif"]= $this->db->query("select count(*) as docPositif from dataStemming where label='positif' ")->result_array();
-			$data["docNegatif"]= $this->db->query("select count(*) as docNegatif from dataStemming where label='negatif' ")->result_array();
+			$data["docPositif"]= $this->db->query("select count(*) as docPositif from dataStemming ds join datatraining dt on ds.idDataStemming =dt.idDataTraining where dt.label='positif' ")->result_array();
+			$data["docNegatif"]= $this->db->query("select count(*) as docNegatif from dataStemming ds join datatraining dt on ds.idDataStemming =dt.idDataTraining where dt.label='negatif' ")->result_array();
 			$data["docNetral"]= $this->db->query("select count(*) as docNetral from 
-				dataStemming where label='netral' ")->result_array();
+				dataStemming ds join datatraining dt on ds.idDataStemming =dt.idDataTraining where dt.label='netral' ")->result_array();
 			$data["docNaiveBayes"]= $this->db->query("select count(*) as docNaiveBayes from datanb ")->result_array();
 			$data["docFeature"]= $this->db->query("select count(*) as docFeature from dataFeature ")->result_array();
 			$data["docDataUji"]= $this->db->query("select count(*) as docDataUji from datatesting ")->result_array();

@@ -1,87 +1,201 @@
 <!DOCTYPE HTML>
 <html>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-	   <!-- Bootstrap -->
-	    <link href="<?= base_url() ?>assets/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <head>
+<!-- <?php echo $bln=$_POST['bulan']; ?> -->
+ 
+ <style type="text/css" media="screen">
+	 select.form-control:not([size]):not([multiple]) {
+	    height: calc(3.25rem + 2px);
+}
+ 	
+ </style>
 <script>
 
 
-
 window.onload = function () {
-	
-			
-        var xmlhttp = new XMLHttpRequest();
-		var url = "http://localhost:8080/sentimenanalis/user/jsonchart";
+	var bulan =document.getElementById("bulan").value;
+	var tahun =document.getElementById("tahun").value;
+	if(bulan=="Bulan" && tahun=="Tahun"){
+
+		var xmlhttp = new XMLHttpRequest();
+		var url = "http://localhost:8080/sentimenanalis/user/jsonchart/0/0";
+		// var url="https://canvasjs.com/data/gallery/php/bitcoin-price.json";
 		var data;
 		xmlhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
-		        var myArr = JSON.parse(this.responseText);
+				getData(this.responseText);
 		        myFunction(this.responseText);
-		        // document.write(this.responseText);
-		        data=this.responseText;
-		        
 		    }
 		};
 
 		
+		xmlhttp.open("GET", url, true);
+		xmlhttp.send();
 
+		function myFunction(data) {
+		
+		dataJson = JSON.parse(data);
+
+
+		var chart = new CanvasJS.Chart("chartContainer",dataJson);
+		chart.render();
+	} 
+}
+}
+		
+
+		function filter(element){	
+			
+		var bulan =document.getElementById("bulan").value;
+		var tahun =document.getElementById("tahun").value;
+		if(bulan !="Bulan" && tahun !="Tahun"){
+
+        var xmlhttp = new XMLHttpRequest();
+		var url = "http://localhost:8080/sentimenanalis/user/jsonchart/"+bulan+"/"+tahun;
+		// var url="https://canvasjs.com/data/gallery/php/bitcoin-price.json";
+		var data;
+		xmlhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		        myFunction(this.responseText);
+		        getData(this.responseText);
+		    }
+		};
+
+		
 		xmlhttp.open("GET", url, true);
 		xmlhttp.send();
 		
+		
+
 		function myFunction(data) {
-			// document.write(data)
 		
-
-		// var data= '{"animationEnabled":true,"title":{"text":"Twitter Sentimen Analisis "},"axisY":[{"title":"Kategori Tweet","lineColor":"#2c3e50","tickColor":"#2c3e50","labelFontColor":"#2c3e50","titleFontColor":"#2c3e50","suffix":"k"}],"toolTip":{"shared":true},"legend":{"cursor":"pointer","itemclick":"toggleDataSeries"},"data":[{"type":"line","name":"Positif","color":"#e67e22","showInLegend":true,"axisYIndex":1,"xValueType":"dateTime","dataPoints":[{"x":1527631200,"y":"0"},{"x":1104517800000,"y":55}]},{"type":"line","name":"Negatif","color":"#2ecc71","showInLegend":true,"axisYIndex":1,"xValueType":"dateTime","dataPoints":[{"x":1088620200000,"y":55},{"x":1104517800000,"y":65}]}]}';
-
-		// var data2='{"animationEnabled":true,"title":{"text":"Twitter Sentimen Analisis "},"axisY":[{"title":"Kategori Tweet","lineColor":"#2c3e50","tickColor":"#2c3e50","labelFontColor":"#2c3e50","titleFontColor":"#2c3e50","suffix":"k"}],"toolTip":{"shared":true},"legend":{"cursor":"pointer","itemclick":"toggleDataSeries"},"data":[{"type":"line","name":"Positif","color":"#e67e22","showInLegend":true,"axisYIndex":1,"xValueType":"dateTime","dataPoints":[{"x":1527631200,"y":0},{"x":1527717600,"y":3},{"x":1527890400,"y":0},{"x":1527976800,"y":0},{"x":1528063200,"y":0}]},{"type":"line","name":"Negatif","color":"#e74c3c","showInLegend":true,"axisYIndex":1,"xValueType":"dateTime","dataPoints":[{"x":1527631200,"y":0},{"x":1527717600,"y":1},{"x":1527890400,"y":0},{"x":1527976800,"y":2},{"x":1528063200,"y":1}]},{"type":"line","name":"Netral","color":"#2980b9","showInLegend":true,"axisYIndex":1,"xValueType":"dateTime","dataPoints":[{"x":1527631200,"y":1},{"x":1527717600,"y":18},{"x":1527890400,"y":3},{"x":1527976800,"y":0},{"x":1528063200,"y":3}]}]}';
-
-		var d= JSON.parse(data);
-		// document.write(data);
-		// document.write(new Date(d.dataPoints[0].x));
+		if(data.length==740){
+			$('#passwordsNoMatchRegister').show();
+			var chart = new CanvasJS.Chart("chartContainer","");
+			chart.render();
+		}else{
+		$('#passwordsNoMatchRegister').hide();
+		dataJson = JSON.parse(data);
+		var chart = new CanvasJS.Chart("chartContainer",dataJson);
+		chart.render();
+		}
 		
-		// document.write(d.dataPoints.length);
-						// var dp= {dataPoints:{}};
-
-					 // 		for (var i = 0; i < d.dataPoints.length ; i++) {
-						// 		// document.write(new Date(d.dataPoints[i].x));
-						// 		// dataPoints['x'] = new Date(d.dataPoints[i].x;
-						// 		var objName= 'x'+i;
-						// 		var objValue= new Date(d.dataPoints[i].x);
-						// 		dp.dataPoints[objName]=objValue;
-
-						// 	}
-						// 	console.log(JSON.stringify(dp));
-
-		// document.write(dp.dataPoints);
-
-
-			// var json= parse(
-			// '{"x":new Date("2017,01,07"), "y": 85.4 }, {"x":new Date("2017,01,08"), "y": 92.7 }');
-			// window.write(json)
-
-
-	var chart = new CanvasJS.Chart("chartContainer",d);
-chart.render();
-
-}
-
-function toggleDataSeries(e) {
-	if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-		e.dataSeries.visible = false;
-	} else {
-		e.dataSeries.visible = true;
+		}
 	}
-	e.chart.render();
-}
 
-}
+	}
+
+	function getData(data){
+	 		var positif=JSON.parse(data).data[0].dataPoints.length
+	 		var sumPositif=0;
+	 		var negatif=JSON.parse(data).data[1].dataPoints.length
+	 		var sumNegatif=0;
+	 		var netral=JSON.parse(data).data[2].dataPoints.length
+	 		var sumNetral=0;
+			for (var i = 0; i < positif; i++) {
+				// console.log(i);
+				// console.log(JSON.parse(data).data[0].dataPoints[i].y)
+				sumPositif += JSON.parse(data).data[0].dataPoints[i].y;
+				sumNegatif += JSON.parse(data).data[1].dataPoints[i].y;
+				sumNetral += JSON.parse(data).data[2].dataPoints[i].y;
+
+			}
+			document.getElementById("positif").innerHTML=sumPositif;
+			document.getElementById("negatif").innerHTML=sumNegatif;
+			document.getElementById("netral").innerHTML=sumNetral;
+
+			// console.log(sumPositif);
+			// console.log(sumNegatif);
+			// console.log(sumNetral);
+		}
+
 </script>
 </head>
 <body>
 <div class="container">
-	<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+ <!-- <form action="<?= base_url().'user/chart/07/2018' ?>" method="post" accept-charset="utf-8">  -->
+<form action="" method="get" accept-charset="utf-8">
+
+<div class="form-row">
+	<div class="form-group col-md-12">
+	<label for="inputEmail4">Pilih Bulan dan Tahun Untuk Melakukan Filter</label>
+	</div>
+    <div class="form-group col-md-2">
+      <!-- <label for="inputEmail4">Pilih Bulan dan Tahun Untuk Filter</label> -->
+    
+<select id='bulan' name="bulan" onChange="filter(this);" class="form-control">
+<option >Bulan</option>
+<?php
+$bulan=array("Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
+$bulanIndex=array("01","02","03","04","05","06","07","08","09","10","11","12");
+$jlh_bln=count($bulan);
+for($c=0; $c<$jlh_bln; $c+=1){
+    echo"<option value=$bulanIndex[$c]> $bulan[$c] </option>";
+}
+?>
+</select>
+</div>
+    <div class="form-group col-md-2">
+      
+<!-- <select name='tahun' onchange="javascript: if(this.value != '0') this.form.submit(); else alert('hello');" > -->
+
+<!-- <label for="inputPassword4">Tahun</label> -->
+
+      <div class="form-group">
+	<select class="form-control" id="tahun" name='tahun' onChange="filter(this);" >
+	    <option >Tahun</option>
+	    <option value='2016'>2016</option>
+	    <option value='2017'>2017</option>
+	    <option value='2018'>2018</option>
+	</select>
+</div>
+    </div>
+  </div>
+ </form>
+<!-- <div class="alert alert-error collapse" role="alert" id="passwordsNoMatchRegister">
+  <span>
+  <p>Looks like the passwords you entered don't match!</p>
+  </span>
+</div>
+ -->
+ <div class="container">
+ 	<div class="row">
+ <h4> Total :  &nbsp;</h4> 
+ <button type="button" class="btn btn-primary">Positif <span class="badge" id="positif">0</span></button>
+ 	&nbsp;
+  <button type="button" class="btn btn-danger">Negatif <span class="badge" id="negatif">0</span></button>    
+  &nbsp;
+  <button type="button" class="btn btn-success">Netral <span class="badge"  id="netral">0</span></button>  
+</div>
+</div>
+<div class="alert alert-primary collapse" role="alert" id="passwordsNoMatchRegister">
+  Data yang dicari Tidak Ditemukan 
+</div>
+
+	<!-- 	<div class="btn-group">
+		  <button type="button " class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    Pilih Bulan
+		  </button>
+		  <div class="dropdown-menu">
+		    <a class="dropdown-item" href="#">Januari</a>
+		    <a class="dropdown-item" href="#">Februari</a>
+		    <a class="dropdown-item" href="#">Maret</a>
+		    <a class="dropdown-item" href="#">April</a>
+		    <a class="dropdown-item" href="#">Mei</a>
+		    <a class="dropdown-item" href="#">Juni</a>
+		    <a class="dropdown-item" href="#">Juli</a>
+		    <a class="dropdown-item" href="#">Agustus</a>
+		    <a class="dropdown-item" href="#">September</a>
+		    <a class="dropdown-item" href="#">Oktober</a>
+		    <a class="dropdown-item" href="#">November</a>
+		    <a class="dropdown-item" href="#">Desember</a>
+
+		  </div>
+		</div> -->
+		<!-- </form> -->
+<!-- <button type="button" class="btn btn-primary">Submit Filter</button> -->
+	<hr>
+	<div id="chartContainer" style="height: 320px; width: 100%;"></div>
 	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </div>
 </body>

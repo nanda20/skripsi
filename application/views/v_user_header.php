@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <!-- <title>Bootstrap Example</title> -->
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
    <!-- Bootstrap -->
     <link href="<?= base_url() ?>assets/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
+<style type="text/css">
+    .navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 20px;
+    color: white;
+}
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+    color: black;
+    background-color: #fbf7f7;
+    border-color: #337ab7;
+}
+</style>
 </head>
 <body>
   
@@ -37,19 +50,20 @@
       <li class="nav-item">
         <a class="nav-link" href="<?=base_url('User/viewKlasifikasiTweet');?>">Tampilkan Tweet</a>
       </li>
-      <!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-       -->
+
+
     </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="">
+          <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Logout<span class=" fa fa-angle-down"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-usermenu pull-right">
+            <li><a href="http://localhost:8080/sentimenanalis/login/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+          </ul>
+        </li>        
+    </ul>
+        </li>
+      </ul>
   </div>
 </nav>
 

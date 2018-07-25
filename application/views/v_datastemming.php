@@ -27,7 +27,7 @@
   <strong>Info! Ada <?php echo $getStemm[0]->stemm; ?> Dokumen Baru </strong> 
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 </div>  
-    <form action="<?= base_url('datatraining/viewstemming');?>" method="post" accept-charset="utf-8">
+    <form action="<?= base_url('datatraining/processstimming');?>" method="post" accept-charset="utf-8">
         <button class="btn btn-primary" name="submit" value="submit" type="submit"  data-toggle="modal" data-target="#myModal">Process</button>    
     </form>
     

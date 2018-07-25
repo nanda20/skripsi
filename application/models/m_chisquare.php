@@ -5,16 +5,14 @@ class m_chisquare extends CI_Model {
 
 	public function allDataCorpus()
 	{
-		$q=$this->db->query("select * from datacorpus");
+		$q=$this->db->query("select dc.idDataCorpus,dc.feature,df.frequency,df.label,dc.valueChiSquare from datacorpus dc join dataFeature df on dc.idDataFeature=df.idDatafeature");
       	return $q;
-
 	}
 
 	public function allChiSquare()
 	{
 		$q=$this->db->query("select count(*) as allChiSquare from datafeature ")->result();
       	return $q;
-
 	}
 
 	public function insertCorpus($data){
@@ -24,11 +22,11 @@ class m_chisquare extends CI_Model {
 	public function truncateCorpus(){
 		$this->db->truncate('datacorpus'); 
 	}
-	// public function updateFeatureStatus($id){
-	// 	$this->db->set('chisquare', 1);
-	// 	$this->db->where('id', $id);
-	// 	$this->db->update('datafeature'); 
+	// public function viewChiFilter(){
+	// 	$q=$this->db->query("select count(*) as allChiSquare from datafeature ")->result();
+ //      	return $q;		
 	// }
+	
 
 }
 

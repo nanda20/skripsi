@@ -14,11 +14,11 @@ class m_datatraining extends CI_Model {
   	}
   	public function updateDataTraining($id,$label){
 			$data = array('label' => $label);
-			$this->db->where('id', $id);
+			$this->db->where('idDataTraining', $id);
 			$this->db->update('datatraining', $data); 
   	}
     public function getStemm(){
-      return $this->db->query("SELECT count(id) stemm FROM `datatraining` WHERE stemming=0")->result();
+      return $this->db->query("SELECT count(idDataTraining) stemm FROM `datatraining` WHERE stemming=0")->result();
     }
 
     public function getCountDocStemm(){
@@ -29,7 +29,7 @@ class m_datatraining extends CI_Model {
 
     public function updateDataTrainingStemming($id){
       $data = array('stemming' => 1);
-      $this->db->where('id', $id);
+      $this->db->where('idDataTraining', $id);
       $this->db->update('datatraining', $data); 
     }
 
@@ -45,11 +45,11 @@ class m_datatraining extends CI_Model {
     }
 
     public function allDataStemming(){
-        $q=$this->db->query("select * from datastemming");
+        $q=$this->db->query("select ds.idDataStemming,ds.idDataTraining,ds.tweet,dt.label,dt.username from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining");
         return $q;
     }
     public function allDataStemmingByLabel($label){
-        $q=$this->db->query("select * from datastemming where label='$label'")->result_array();
+        $q=$this->db->query("select ds.idDataStemming,ds.idDataTraining,ds.tweet,dt.label,dt.username from datastemming ds join datatraining dt on ds.idDataTraining =dt.idDataTraining where dt.label='$label'")->result_array();
         return $q;
     }
     public function insertDataFeature($data){

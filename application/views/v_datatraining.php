@@ -65,16 +65,16 @@
 
                         <label class="radio-inline">
                         <input type="radio" name="optradio<?=$i?>" value="positif" <?php  echo ($row->label == 'positif')? "checked":"" ?> />
-                        <a href="<?= site_url('/datatraining/insertlabel').'/'.$row->id.'/positif' ?>">positif</a>
+                        <a href="<?= site_url('/datatraining/insertlabel').'/'.$row->idDataTraining.'/positif' ?>">positif</a>
                         </label>
                         
                         <label class="radio-inline">
                         <input type="radio" name="optradio<?=$i?>" value="negatif" <?php  echo ($row->label == 'negatif')? "checked":"" ?> />
-                        <a href="<?= site_url('/datatraining/insertlabel').'/'.$row->id.'/negatif' ?>">negatif</a>
+                        <a href="<?= site_url('/datatraining/insertlabel').'/'.$row->idDataTraining.'/negatif' ?>">negatif</a>
                         </label>
                         <label class="radio-inline">
                         <input type="radio" name="optradio<?=$i?>" value="netral" <?php  echo ($row->label == 'netral')? "checked":"" ?> />
-                        <a href="<?= site_url('/datatraining/insertlabel').'/'.$row->id.'/netral' ?>">netral</a>
+                        <a href="<?= site_url('/datatraining/insertlabel').'/'.$row->idDataTraining.'/netral' ?>">netral</a>
                         </label>
                 
                     </td>
