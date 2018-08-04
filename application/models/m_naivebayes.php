@@ -5,7 +5,7 @@ class m_naivebayes extends CI_Model {
 
 	function getAll(){
 
-		$q=$this->db->query("select * from datanb");
+		$q=$this->db->query("SELECT dn.*,df.* FROM datanb dn join datacorpus dc on dn.idDataCorpus = dc.idDataCorpus join datafeature df on dc.idDataFeature=df.idDataFeature");
       	return $q;
 	}
 	

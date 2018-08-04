@@ -324,7 +324,7 @@ class DataTraining extends CI_Controller {
 		foreach ($Qterm as $value) {
 					$result = $this->counting_chi($i,$value->feature,$value->label);
 			 // echo $i.' - '.$result.'<br>';
-				if($result >=2.70554 ){
+				if($result >= 2.71 ){
 					$data=array('idDataCorpus' =>null ,'idDataFeature'=>$value->idDataFeature,'feature'=>$value->feature,'valueChiSquare'=>$result);
 					// echo $y++.' - '.$data['feature'].' - '. $data['label'] .' '.$data['valueChiSquare'].'<br>';
 				// 	// array_push($hasil,$data); 
@@ -342,11 +342,11 @@ class DataTraining extends CI_Controller {
 	{
  		$this->db->truncate('datanb'); 
 
-		$db= $this->db->query("select dc.idDataCorpus,dc.feature,df.frequency,df.label from datacorpus dc join dataFeature df on dc.idDataFeature=df.idDataFeature  ")->result();
+		$db= $this->db->query("select dc.idDataCorpus as id,dc.feature,df.frequency,df.label from datacorpus dc join dataFeature df on dc.idDataFeature=df.idDataFeature ")->result();
 		
 
 		// echo "<br>";
-		$V =  $this->db->query("select count(DISTINCT feature) as count from datacorpus ")->result();
+		$V =  $this->db->query("select count(DISTINCT feature) as count from datacorpus")->result();
 		// print_r($V[0]->count);
 		$i=1;
 		foreach ($db as $value) {
@@ -359,7 +359,11 @@ class DataTraining extends CI_Controller {
 			echo $i.' '.$value->feature.' '. $value->label .' | Tct=' .$value->frequency.' | λ = 1'.' | Nc = '.$nc[0]->count.' | V='.$V[0]->count.' Probability = '.$nbValue.'</br>';
 			$i++;
 
-			$data=array('id'=>null,'feature'=>$value->feature,'frequency'=>$value->frequency,'label'=>$value->label,'naivebayesvalue'=>$nbValue);
+			$data=array('id'=>null,
+				// 'feature'=>$value->feature,
+				// 'frequency'=>$value->frequency,'label'=>$value->label,
+				
+				'naivebayesvalue'=>$nbValue,'idDataCorpus'=>$value->id);
 			$this->db->insert('datanb',$data);
 		}
 
@@ -500,7 +504,9 @@ class DataTraining extends CI_Controller {
 
 		return $result;
 	}
-
+	public function lower(){
+		echo trim(strtolower('Pertama kalinya naik kereta ekonomi antarkota. Nyaman.  Makananya enak sekali. #ptkai @PTKAI'));
+	}
 
 	public function cleaningtweet($tweet){
 
@@ -534,16 +540,19 @@ class DataTraining extends CI_Controller {
 						
 					$dataStemming= $this->m_datatraining->allDataStemmingByLabel($label[$iLabel]);
 					$stemmArray=array();
+					$idStemming=array();
 
 					$y=0;
+					$id=0;
 						foreach ($dataStemming as $value) {
-							
+							// echo $value['idDataStemming'].'|';
+
 							$tweet = explode(" ", $value['tweet']);
 							for ($i=0; $i < count($tweet); $i++) { 
 								$stemmArray[$y]=$tweet[$i];
 								$y++;			
 							}
-
+						$id++;
 						}
 						// echo str_word_count($dataStemming[0]['tweet']);
 						 
@@ -554,13 +563,13 @@ class DataTraining extends CI_Controller {
 						 		// echo $label[$iLabel];
 						 		// echo '<br>';
 
-						 		$datafeatures=array('idDataFeature'=>null,'feature'=>$key,'frequency'=>$frequency,'label'=>$label[$iLabel]);
+						 		$datafeatures=array('idDataFeature'=>null,'feature'=>$key,'frequency'=>$frequency,'label'=>$label[$iLabel]
+
+						 			);
 						 		$this->m_datatraining->insertDataFeature($datafeatures);
 						 	}
 
 						 }
-
-						
 						}
 						// $datafeatures=array('id'=>null,'feature'=>'minangkabau','frequency'=>2,'label'=>'positif');
 						// $this->m_datatraining->insertDataFeature($datafeatures);

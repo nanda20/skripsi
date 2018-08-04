@@ -20,7 +20,10 @@ class m_chisquare extends CI_Model {
 		$this->db->insert('datacorpus',$data);
 	}
 	public function truncateCorpus(){
-		$this->db->truncate('datacorpus'); 
+		$this->db->empty_table("datanb");
+		$this->db->empty_table("datacorpus");
+		// $this->db->truncate('datanb'); 
+		// $this->db->truncate('datacorpus'); 
 	}
 	// public function viewChiFilter(){
 	// 	$q=$this->db->query("select count(*) as allChiSquare from datafeature ")->result();

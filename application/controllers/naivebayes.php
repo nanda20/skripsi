@@ -314,6 +314,7 @@ class NaiveBayes extends CI_Controller {
 			$data['header'] = '';
 			$data['content'] = $this->load->view('v_testing', $valueData, true);
 			$data['script'] = '';
+			
 			$this->template($data);
 			
 
@@ -456,14 +457,16 @@ class NaiveBayes extends CI_Controller {
 		$stopwords = $this->load->file("./stopwords.txt", TRUE);
 		$stopwordsList = explode("\n", $stopwords);
 		$stopwordsListNoSpace =preg_replace("/\s+/",'',$stopwordsList);
-		$sentence="Pertama kalinya naik kereta ekonomi antarkota. Suprisingly, nyaman. @PTKAI";
+		$sentence="Pertama kalinya naik kereta ekonomi antarkota. Nyaman.  Makananya enak. #ptkai @PTKAI";
+
+		echo $stemmer->stem('makananya').'<br>';
 		$clcn=$this->cleaningtweet($sentence);
 
 		foreach ($clcn['terms'] as $terms ) {
 					// echo empty($terms);
 					if (!in_array($stemmer->stem($terms),$stopwordsListNoSpace) && !empty($terms) ) {
 
-						 echo  $terms.' | ';
+						 echo $stemmer->stem($terms).'|';
 						}
 
 		}
@@ -499,8 +502,13 @@ class NaiveBayes extends CI_Controller {
 			$nb=1;
 			// $set="datanb";
 			foreach ($Alabel as $label) {
-						
-				$ncQuery = $this->db->query("select sum(frequency) as countAll from $set where label='".$label."'")->result_array();
+				$ncQuery='';
+				if($set=='datanb'){
+					$ncQuery = $this->db->query("select sum(df.frequency) as countAll from datacorpus dc join datafeature df on dc.idDataFeature=df.idDataFeature where df.label='".$label."'")->result_array();
+				}else{
+					$ncQuery = $this->db->query("select sum(frequency) as countAll from datafeature where label='".$label."'")->result_array();
+				}
+				
 
 			 
 				$nc =$ncQuery[0]['countAll'];
@@ -513,7 +521,17 @@ class NaiveBayes extends CI_Controller {
 					if (!in_array($stemmer->stem($terms),$stopwordsListNoSpace) && !empty($terms) ) {
 								
 								// echo $stemmer->stem($terms).' | ';
-								 $nct = $this->db->query("select * from $set where feature='".$stemmer->stem($terms)."' and label='".$label."'")->result();
+								 
+								 // $nct = $this->db->query("select * from $set where feature='".$stemmer->stem($terms)."' and label='".$label."'")->result();
+
+							$nct='';
+
+							if($set=='datanb'){
+								$nct = $this->db->query("select df.frequency from datacorpus dc join datafeature df on dc.idDataFeature=df.idDataFeature where df.feature='".$stemmer->stem($terms)."' and df.label='".$label."'")->result();
+							}else{
+								$nct = $this->db->query("select * from dataFeature where feature='".$stemmer->stem($terms)."' and label='".$label."'")->result();
+							}
+							
 
 								 
 								 if(count($nct)>0){
